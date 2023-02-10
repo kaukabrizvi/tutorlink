@@ -1,6 +1,4 @@
-# Django Practice Assessment
+# TutorLink
 
-__Name:__
-
-__Computing ID:__
+This is Team A-06's web application for connecting tutors and students.
 
