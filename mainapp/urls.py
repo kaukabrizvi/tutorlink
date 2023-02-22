@@ -22,6 +22,7 @@ from . import views
 app_name = "mainapp"
 urlpatterns = [
     path('', views.index, name='index'),
+    path('', include('tutorlink.urls')),
     path('student',TemplateView.as_view(template_name="mainapp/studentLogin.html"), name='student'),
     path('tutor', TemplateView.as_view(template_name="mainapp/tutorLogin.html"), name='tutor'),
     path('accounts/', include('allauth.urls')),
