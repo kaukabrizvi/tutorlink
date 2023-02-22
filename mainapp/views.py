@@ -1,12 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
-
+from django.urls import reverse
+from django.shortcuts import redirect
 # Create your views here.
+
+
 def index(request):
-    return HttpResponse("This will be the home page for the TutorLink app TEST.")
+    return render(request,"mainapp/index.html")
 
-
-class studentLoginView(generic.ListView):
-    template_name = 'studentLogin.html']
-    context_object_name = 'student_login'
