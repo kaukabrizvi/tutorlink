@@ -1,15 +1,21 @@
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% bootstrap_messages %}
 {% load static %}
-
+{% load socialaccount %}
 <html>
     <head>
         <title> Tutor Me </title>
     </head>
     <body>
+{% if user.is_authenticated and not user.is_tutor and not user.is_student %}
+        <form method="POST" action="{% url 'apply-type' %}">
+            {% csrf_token %}
+            <button class= "btn btn-info" name="tutorbtn">I am a Tutor</button>
+            <button class= "btn btn-info" name="studentbtn">I am a Student</button>
+        </form>
+{% elif user.is_authenticated %}
+  <p>Welcome, You are logged in as {{ user.username }}</p>
+  {% endif %}
         <h1><center> Tutor Me </center></h1>
         <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
+        <center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
     </body>
 </html>
