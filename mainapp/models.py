@@ -4,9 +4,10 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 class Profile(models.Model):
+        REQUIRED_FIELDS = ('user',)
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-        is_tutor = False
-        is_student = False
+        is_tutor = models.BooleanField(verbose_name="is_tutor", default=False)
+        is_student = models.BooleanField(verbose_name="is_student", default=False)
         def __str__(self):
                 return str(self.user)
 

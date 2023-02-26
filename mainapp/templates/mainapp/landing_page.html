@@ -1,10 +1,12 @@
 {% load static %}
 {% load socialaccount %}
+
 <html>
     <head>
         <title> Tutor Me </title>
     </head>
     <body>
+<!--
 {% if user.is_authenticated and not user.is_tutor and not user.is_student %}
         <form method="POST" action="{% url 'apply-type' %}">
             {% csrf_token %}
@@ -12,8 +14,17 @@
             <button class= "btn btn-info" name="studentbtn">I am a Student</button>
         </form>
 {% elif user.is_authenticated %}
-  <p>Welcome, You are logged in as {{ user.username }}</p>
+  <p>Welcome, You are logged in as {{ user.username }} as Tutor</p>
   {% endif %}
+    -->
+        {{user.username}}
+        {{user.email}}
+        {% if user.is_tutor %}
+            is Tutor
+        {% endif %}
+        {% if user.is_student %}
+            is Student
+        {% endif %}
         <h1><center> Tutor Me </center></h1>
         <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
         <center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
