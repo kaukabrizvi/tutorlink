@@ -17,15 +17,14 @@ def index(request):
 #Assigns user type
 def assignUserType(request):
     if "tutorbtn" in request.POST:
-        theUser = request.user
-        print(theUser.username)
-        theUser
-        theUser.save()
-        print(theUser.is_tutor)
+        Profile.objects.filter(user=request.user).update(is_tutor=True)
         return redirect('index')
     
     if "studentbtn" in request.POST:
-        theUser = request.user
-        theUser.is_student = True
-        theUser.save()
+        Profile.objects.filter(user=request.user).update(is_student=True)
         return redirect('index')
+    
+def changeRole(request):
+    Profile.objects.filter(user=request.user).update(is_tutor=False)
+    Profile.objects.filter(user=request.user).update(is_student=False)
+    return redirect('index')

@@ -27,5 +27,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
     path('admin', admin.site.urls),
-    path('user/assign',views.assignUserType, name='apply-type')
+    path('user/assign',views.assignUserType, name='apply-type'),
+    path('changerole/', views.changeRole, name='change-role')
 ]
