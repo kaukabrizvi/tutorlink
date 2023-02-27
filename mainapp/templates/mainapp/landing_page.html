@@ -1,15 +1,35 @@
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% bootstrap_messages %}
 {% load static %}
+{% load socialaccount %}
 
 <html>
     <head>
         <title> Tutor Me </title>
     </head>
     <body>
-        <h1><center> Tutor Me </center></h1>
+    <h1><center>Tutor Me</center></h1>
+    {% if user.is_authenticated %}
+        {% for profile in Profiles %}
+        <br></br>
+            {% if profile.user.email|stringformat:"s" == user.email|stringformat:"s" %}
+                {% if profile.is_tutor %}
+                    <center><p>Welcome, Tutor {{ user.username }}</p></center>
+                {% elif profile.is_student %}
+                    <center><p>Welcome, Student {{ user.username }}</p></center>
+                {% else %}
+                    <center><p>Welcome, {{ user.username }}. Please use the buttons below to indicate whether you are a tutor or student.</p></center>
+                    <form method="POST" action="{% url 'apply-type' %}">
+                        {% csrf_token %}
+                        <center><button class= "btn btn-info" name="tutorbtn" type="submit".>I am a Tutor</button></center>
+                        <center><button class= "btn btn-info" name="studentbtn" type="submit">I am a Student</button></center>
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <center><a href="changerole/" class="btn btn-info">Remove Role</a></center>
+        <center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
+    {% else %}
+        <p><center>Welcome to TutorLink! Please login using the button below.</center></p>
         <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
+    {% endif %}
     </body>
 </html>
