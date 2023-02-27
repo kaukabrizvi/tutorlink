@@ -6,27 +6,27 @@
         <title> Tutor Me </title>
     </head>
     <body>
-<!--
-{% if user.is_authenticated and not user.is_tutor and not user.is_student %}
-        <form method="POST" action="{% url 'apply-type' %}">
-            {% csrf_token %}
-            <button class= "btn btn-info" name="tutorbtn">I am a Tutor</button>
-            <button class= "btn btn-info" name="studentbtn">I am a Student</button>
-        </form>
-{% elif user.is_authenticated %}
-  <p>Welcome, You are logged in as {{ user.username }} as Tutor</p>
-  {% endif %}
-    -->
-        {{user.username}}
-        {{user.email}}
+    <h1><center>Tutor Me</center></h1>
+    {% if user.is_tutor %}
+        Bruce is Tutor
+    {% endif %}
+    {% if user.is_authenticated %}
         {% if user.is_tutor %}
-            is Tutor
+            <center><p>Welcome, Tutor {{ user.username }}</p></center>
+        {% elif user.is_student %}
+            <center><p>Welcome, Student {{ user.username }}</p></center>
+        {% else %}
+            <center><p>Welcome, {{ user.username }}. Please use the buttons below to indicate whether you are a tutor or student.</p></center>
+            <form method="POST" action="{% url 'apply-type' %}">
+                {% csrf_token %}
+                <center><button class= "btn btn-info" name="tutorbtn" type="submit".>I am a Tutor</button></center>
+                <center><button class= "btn btn-info" name="studentbtn" type="submit">I am a Student</button></center>
+            </form>
         {% endif %}
-        {% if user.is_student %}
-            is Student
-        {% endif %}
-        <h1><center> Tutor Me </center></h1>
-        <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
         <center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
+    {% else %}
+        <p><center>Welcome to TutorLink! Please login using the button below.</center></p>
+        <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
+    {% endif %}
     </body>
 </html>

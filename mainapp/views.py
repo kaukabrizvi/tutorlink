@@ -15,6 +15,7 @@ def assignUserType(request):
         theUser = request.user
         theUser.is_tutor = True
         theUser.save()
+        print(theUser.is_tutor)
         return redirect('index')
     
     if "studentbtn" in request.POST:
