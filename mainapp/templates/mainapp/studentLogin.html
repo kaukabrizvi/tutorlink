@@ -5,7 +5,12 @@
 {% if user.is_authenticated %}
   <p>Welcome, You are logged in as {{ user.username }}</p>
 {% else %}
-  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+  <a href="index">Go to Login</a>
 {% endif %}
 </body>
+<a href="">View all Classes</a>
+<a href="">My Tutors</a>
+<a href="{% url 'tutorList' %}">Tutor Search</a>
+<center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
+<center><a href="{% url 'index' %}" class="btn btn-primary stretched-link">Main Page</a></center>
 </html>

@@ -18,7 +18,7 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 from . import views
-
+from .views import SearchResultsView
 app_name = "mainapp"
 urlpatterns = [
     path('', views.index, name='index'),
@@ -28,5 +28,7 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
     path('admin', admin.site.urls),
     path('user/assign',views.assignUserType, name='apply-type'),
-    path('changerole/', views.changeRole, name='change-role')
+    path('changerole/', views.changeRole, name='change-role'),
+    path('student/allTutors', views.getAllTutors, name="tutorList"),
+    path('studnet/allTutors/results', SearchResultsView.as_view(), name='tutorSearch')
 ]

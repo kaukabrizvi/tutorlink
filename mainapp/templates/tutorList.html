@@ -1,0 +1,13 @@
+{% load socialaccount %}
+<h1>Tutor List</h1>
+<form action="{% url 'tutorSearch' %}" method="get">
+    <input name="q" type="text" placeholder="Search...">
+</form>
+
+
+{% for tutor in found_tutors %}
+    <li>
+        TEST
+        {{tutor.user.username}}
+    </li>
+{% endfor %}
