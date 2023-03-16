@@ -28,5 +28,8 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
     path('admin', admin.site.urls),
     path('user/assign',views.assignUserType, name='apply-type'),
-    path('changerole/', views.changeRole, name='change-role')
+    path('changerole/', views.changeRole, name='change-role'),
+    path('departments/', views.department_list, name='department_list'),
+    path('courses/<str:mnemonic>/', views.course_list, name='course_list'),
+    path('classes/<str:class_title>/', views.select_class, name='select_class'),
 ]

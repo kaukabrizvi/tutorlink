@@ -1,0 +1,15 @@
+<h1>Departments</h1>
+<ul>
+  <body>
+    <div id="header">
+        <h1>{% block header %}<a href="{% url 'index' %}">TutorLink</a>{% endblock %}</h1>
+        {% include 'mainapp/search.html' %}
+    </div>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body> 
+{% for mnemonic in mnemonics %}
+    <li><a href="{% url 'course_list' mnemonic %}">{{ mnemonic }}</a></li>
+{% endfor %}
+</ul>
