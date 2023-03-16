@@ -42,5 +42,6 @@ class SearchResultsView(ListView):
     template_name = "tutorList.html"
     def get_queryset(self):
         query = self.request.GET.get("q")
-        found_tutors = Profile.objects.filter(is_tutor=True)
+        found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
         return found_tutors
+        

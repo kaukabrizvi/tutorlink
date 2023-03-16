@@ -30,5 +30,5 @@ urlpatterns = [
     path('user/assign',views.assignUserType, name='apply-type'),
     path('changerole/', views.changeRole, name='change-role'),
     path('student/allTutors', views.getAllTutors, name="tutorList"),
-    path('studnet/allTutors/results', SearchResultsView.as_view(), name='tutorSearch')
+    path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch')
 ]

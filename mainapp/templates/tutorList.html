@@ -4,10 +4,8 @@
     <input name="q" type="text" placeholder="Search...">
 </form>
 
-
-{% for tutor in found_tutors %}
+{% for tutor in object_list %}
     <li>
-        TEST
         {{tutor.user.username}}
     </li>
 {% endfor %}
