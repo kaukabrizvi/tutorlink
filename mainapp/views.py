@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views import generic
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import ListView
 from django.urls import reverse
 from django.shortcuts import redirect
 from .models import Profile, ClassList
@@ -19,11 +21,11 @@ def index(request):
 def assignUserType(request):
     if "tutorbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_tutor=True)
-        return redirect('index')
+        return redirect('tutor')
     
     if "studentbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_student=True)
-        return redirect('index')
+        return redirect('student')
     
 def changeRole(request):
     Profile.objects.filter(user=request.user).update(is_tutor=False)
@@ -80,10 +82,19 @@ def select_class(request, class_title):
         'class_section': classInfo['class_section']
     })
 
+def getAllTutors(request):
+    tutors = Profile.objects.filter(is_tutor = False)
+    context = {
+        "Tutors" : tutors
+    }
+    return render(request,"tutorList.html",context)
 
-
-
-
-
-
+#Got this from learndjango.com/tutorials/django-search-tutorial
+class SearchResultsView(ListView):
+    model = Profile
+    template_name = "tutorList.html"
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
+        return found_tutors
 
