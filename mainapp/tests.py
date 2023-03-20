@@ -4,6 +4,7 @@ from django import setup
 import os
 #from .sis_data import get_depts
 
+
 # Create tests here.
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
