@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django import setup
 import os
-from .sis_data import get_depts
 
 # Create tests here.
 
@@ -16,13 +15,13 @@ class LandingPageTestCase(TestCase):
         response = self.client.post(reverse('index'))
         
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tutor-link/landing_page.html')
+        self.assertTemplateUsed(response, 'mainapp/landing_page.html')
 
     def test_dept_list_pulled_correctly(self):
       
-        depts = get_depts("https://tutor-link.herokuapp.com/api/")
+        depts = self.client.post(reverse('department_list'))
         
-        self.assertGreater(len(depts), 0)
-        self.assertTrue("APMA" in depts)
-        self.assertTrue("PHYS" in depts)
+        self.assertGreater(len(depts.context["mnemonics"]), 0)
+        self.assertTrue("APMA" in depts.context["mnemonics"])
+        self.assertTrue("PHYS" in depts.context["mnemonics"])
 
