@@ -1,7 +1,7 @@
 <h1>{{ subject }} Courses</h1>
 <ul>
 {% for course in courses %}
-    <li><a href="{% url 'select_class' class_title=course.title%}">{{ course.title }}</a></li>
+    <li><a href="{% url 'select_class' class_title=course.title.upper%}">{{ course.title }}</a></li>
 {% empty %}
     <li>No courses found.</li>
 {% endfor %}
