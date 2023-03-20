@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 from django.urls import reverse
 from django.shortcuts import redirect
-from .models import Profile, ClassList
+from .models import Profile, Course
 import requests
 # Create your views here.
 
@@ -74,13 +74,26 @@ def select_class(request, class_title):
 
     response = requests.get(url + '&subject=' + (s[0]) + '&catalog_nbr' + s[1])
     classInfo= response.json()[0]
-
     return render(request, "mainapp/classInfo.html", {
         'subject': classInfo['subject'],
         'catalog_nbr': classInfo['catalog_nbr'],
         'descr': classInfo['descr'],
         'class_section': classInfo['class_section']
     })
+def add_class_to_profile(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    profile = request.user.profile
+    
+    if request.method == 'POST':
+        response = request.POST.get('response')
+        if response == 'yes':
+            profile.classes.append(course)
+            profile.save()
+            return redirect('departments')
+        elif response == 'no':
+            return redirect('departments')
+    
+    return render(request, 'mainApp/classinfo.html', {'course': course})
 
 def getAllTutors(request):
     tutors = Profile.objects.filter(is_tutor = False)

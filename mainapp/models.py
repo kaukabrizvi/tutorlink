@@ -9,6 +9,7 @@ class Profile(models.Model):
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
         is_tutor = models.BooleanField(verbose_name="is_tutor", default=False)
         is_student = models.BooleanField(verbose_name="is_student", default=False)
+        classes = models.JSONField(default=[])
         def __str__(self):
                 return str(self.user)
 
@@ -20,6 +21,21 @@ class Profile(models.Model):
         @receiver(post_save, sender=User)
         def save_user_profile(sender, instance, **kwargs):
                 instance.profile.save()
+
+class Course(models.Model):
+    subject = models.CharField(max_length=100)
+    catalog_number = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    instructor = models.CharField(max_length=255)
+    credits = models.IntegerField()
+    prereqs = models.TextField(blank=True)
+    coreqs = models.TextField(blank=True)
+    term = models.CharField(max_length=6)
+    meeting_times = models.JSONField(default=list)
+
+    def __str__(self):
+        return f"{self.subject} {self.catalog_number} - {self.title}"
 class ClassList(models.Model):
     API_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1"
 
