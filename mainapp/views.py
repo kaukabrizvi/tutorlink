@@ -78,20 +78,14 @@ def select_class(request, class_title):
         'subject': classInfo['subject'],
         'catalog_nbr': classInfo['catalog_nbr'],
         'descr': classInfo['descr'],
-        'class_section': classInfo['class_section']
+        'class_section': classInfo['class_section'],
     })
-def add_class_to_profile(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
+def add_class_to_profile(request):
     profile = request.user.profile
-    
     if request.method == 'POST':
-        response = request.POST.get('response')
-        if response == 'yes':
-            profile.classes.append(course)
-            profile.save()
-            return redirect('departments')
-        elif response == 'no':
-            return redirect('departments')
+        profile.classes.append(request.POST["add_class"])
+        profile.save()
+        return redirect('department_list')
     
     return render(request, 'mainApp/classinfo.html', {'course': course})
 
@@ -110,4 +104,12 @@ class SearchResultsView(ListView):
         query = self.request.GET.get("q")
         found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
         return found_tutors
+
+def viewMyCourses(request):
+    classes = Profile.objects.filter(user = request.user).values("classes")
+    print(classes[0]["classes"])
+    context = {
+        "courses" : classes[0]["classes"]
+    }
+    return render(request,"mainapp/myClasses.html", context)
 

@@ -33,5 +33,7 @@ urlpatterns = [
     path('courses/<str:mnemonic>/', views.course_list, name='course_list'),
     path('classes/<str:class_title>/', views.select_class, name='select_class'),
     path('student/allTutors', views.getAllTutors, name="tutorList"),
-    path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch')
+    path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch'),
+    path('classadded', views.add_class_to_profile, name="add-class"),
+    path('myCourses', views.viewMyCourses, name="myCourses")
 ]

@@ -8,11 +8,10 @@
     <ul>
         <li>Class Section: {{ class_section }}</li>
     </ul>
-    <form method="POST">
+    <form method="POST" action="{% url 'add-class' %}">
         {% csrf_token %}
         <p>Would you like to add this class to your profile?</p>
-        <button type="submit" name="add_class" value="Yes">Yes</button>
-        <button type="submit" name="add_class" value="No">No</button>
+        <button type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Yes</button>
     </form>
 </body>
 </html>
