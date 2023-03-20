@@ -72,13 +72,12 @@ def select_class(request, class_title):
     s = class_title.upper().split()
     url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}'
 
-    response = requests.get(url + '&subject=' + (s[0]) + '&catalog_nbr' + s[1])
+    response = requests.get(url + '&subject=' + (s[0]) + '&catalog_nbr=' + s[1])
     classInfo= response.json()[0]
     return render(request, "mainapp/classInfo.html", {
         'subject': classInfo['subject'],
         'catalog_nbr': classInfo['catalog_nbr'],
         'descr': classInfo['descr'],
-        'class_section': classInfo['class_section'],
     })
 def add_class_to_profile(request):
     profile = request.user.profile

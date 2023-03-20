@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django import setup
 import os
+#from .sis_data import get_depts
+
 
 # Create tests here.
 
@@ -24,4 +26,3 @@ class LandingPageTestCase(TestCase):
         self.assertGreater(len(depts.context["mnemonics"]), 0)
         self.assertTrue("APMA" in depts.context["mnemonics"])
         self.assertTrue("PHYS" in depts.context["mnemonics"])
-
