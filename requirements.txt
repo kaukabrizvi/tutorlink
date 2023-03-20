@@ -23,7 +23,7 @@ fonttools==4.28.1
 google==3.0.0
 gunicorn==20.1.0
 idna==3.4
-importlib-metadata==3.10.1
+importlib-metadata
 kiwisolver==1.3.2
 lml==0.1.0
 matplotlib==3.5.0
