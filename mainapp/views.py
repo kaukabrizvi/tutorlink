@@ -100,12 +100,12 @@ def getAllTutors(request):
     context = {
         "Tutors" : tutors
     }
-    return render(request,"tutorList.html",context)
+    return render(request,"mainapp/tutorList.html",context)
 
 #Got this from learndjango.com/tutorials/django-search-tutorial
 class SearchResultsView(ListView):
     model = Profile
-    template_name = "tutorList.html"
+    template_name = "mainapp/tutorList.html"
     def get_queryset(self):
         query = self.request.GET.get("q")
         found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
