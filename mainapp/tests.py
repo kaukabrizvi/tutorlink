@@ -26,4 +26,3 @@ class LandingPageTestCase(TestCase):
         self.assertTrue("APMA" in depts)
         self.assertTrue("PHYS" in depts)
 
-

@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>{{ subject }} {{ catalog_nbr }}</title>
+</head>
+<body>
+    <h1>{{ subject }} {{ catalog_nbr }}</h1>
+    <p>{{ descr }}</p>
+    <ul>
+        <li>Class Section: {{ class_section }}</li>
+    </ul>
+    <form method="POST" action="{% url 'add-class' %}">
+        {% csrf_token %}
+        <p>Would you like to add this class to your profile?</p>
+        <button type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Yes</button>
+    </form>
+</body>
+</html>

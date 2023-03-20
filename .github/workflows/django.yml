@@ -2,9 +2,11 @@ name: Django CI
 
 on:
   push:
-    branches: [ "SISAPI" ]
+
+    branches: [ "main" ]
   pull_request:
-    branches: [ "SISAPI" ]
+    branches: [ "main" ]
+
 
 jobs:
   build:
@@ -28,3 +30,4 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+
