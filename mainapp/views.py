@@ -112,3 +112,16 @@ def viewMyCourses(request):
     }
     return render(request,"mainapp/myClasses.html", context)
 
+def myProfile(request):
+    theUser = Profile.objects.get(user=request.user)
+    if theUser.is_student:
+       return redirect('student')
+    elif theUser.is_tutor:
+        return redirect('tutor')
+    else:
+        return Http404
+
+def add_tutor_to_profile(request): #need to figure out how we're going to connect them
+        theUser = Profile.objects.get(user=request.user)
+        if request.method == "POST":
+            return
