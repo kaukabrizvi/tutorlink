@@ -123,20 +123,27 @@ def myProfile(request):
 
 def add_tutor_to_profile(request): #need to figure out how we're going to connect them
         theUser = Profile.objects.get(user=request.user)
-        print(theUser.connected_list)
         theTutor = Profile.objects.get(user=request.POST["tutor"])
-        theUser.connected_list.remove(*theUser.connected_list.all())
         if request.method == "POST":
-            #theUser.connected_list.add(theTutor.user)
-            #theTutor.connected_list.add(theUser.user)
-            print(theUser.connected_list)
+            theUser.connected_list.add(theTutor.user)
+            theUser.save()
+            theTutor.connected_list.add(theUser.user) #need to use .all() to retrieve associated objects
+            theTutor.save()
             return redirect("student")
-        
-        """
-        So when I intially ran it before doing the add's that are commented out, all of the users in my local
-        DB were all in everyones connected_list when i looked at the admin site. Now its set up to try to just clear
-        those but i cannot get that connected_list to clear so I have no clue if the commented out adds work correctly.
-        I would check your admin site before running this to see if it did the same. You will need to run a makemigrate and migrate
-        to get the models right since i added another field. To run this, go into a student profile, search for a tutor, select a tutor
-        and hit add tutor.
-        """
+
+
+
+def myTutorList(request):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "tutors" : user.connected_list.all()
+    }
+    return render(request, "mainapp/myTutors.html", context)
+
+def myStudentList(request):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "students" : user.connected_list.all()
+    }
+    return render(request, "mainapp/myStudents.html", context)
+    
