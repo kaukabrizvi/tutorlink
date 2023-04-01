@@ -11,6 +11,7 @@ class Profile(models.Model):
         is_student = models.BooleanField(verbose_name="is_student", default=False)
         classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
+        accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
         def __str__(self):
                 return str(self.user)
 

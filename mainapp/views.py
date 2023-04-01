@@ -131,19 +131,32 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
             theTutor.save()
             return redirect("student")
 
-
+def accept_student_to_profile(request): 
+        theUser = Profile.objects.get(user=request.user)
+        theStudent = Profile.objects.get(user=request.POST["student"])
+        if request.method == "POST":
+            theUser.accepted_list.add(theStudent.user)
+            theUser.connected_list.remove(theStudent.user)
+            theUser.save()
+            theStudent.accepted_list.add(theUser.user)
+            theStudent.connected_list.remove(theUser.user)  
+            theStudent.save()
+            return redirect("tutor")
 
 def myTutorList(request):
     user = Profile.objects.get(user=request.user)
     context = {
-        "tutors" : user.connected_list.all()
+        "requests" : user.connected_list.all(),
+        "tutors" : user.accepted_list.all()
     }
     return render(request, "mainapp/myTutors.html", context)
 
 def myStudentList(request):
     user = Profile.objects.get(user=request.user)
     context = {
-        "students" : user.connected_list.all()
+        "students" : user.connected_list.all(),
+        "accepted" : user.accepted_list.all()
     }
     return render(request, "mainapp/myStudents.html", context)
+
     
