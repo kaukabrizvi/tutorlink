@@ -4,8 +4,11 @@
     <input name="q" type="text" placeholder="Search...">
 </form>
 
-{% for tutor in object_list %}
-    <li>
-        {{tutor.user.username}}
-    </li>
-{% endfor %}
+<form action="{% url 'add-tutor' %}" method="POST">
+    {% csrf_token %}
+    {% for tutor in object_list %}
+        <input name="tutor" type="checkbox" value="{{tutor.id}}">{{tutor.user.username}}</input>
+    {% endfor %}
+    <br>
+    <button type="submit">Request Selected Tutors</button>
+</form>

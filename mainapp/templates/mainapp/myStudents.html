@@ -1,0 +1,14 @@
+{% load socialaccount %}
+<h1>Your Student Requests</h1>
+<form action="{% url 'accept-student' %}" method="POST">
+    {% csrf_token %}
+{% for student in students %}
+<input name="student" type="checkbox" value="{{student.id}}">{{student}}</input>
+{% endfor %}
+<br>
+    <button type="submit">Accept Selected Students</button>
+</form>
+<h1>Your Students</h1>
+{% for accept in accepted %}
+<li>{{accept}}</li>
+{% endfor %}

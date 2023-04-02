@@ -35,5 +35,10 @@ urlpatterns = [
     path('student/allTutors', views.getAllTutors, name="tutorList"),
     path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch'),
     path('classadded', views.add_class_to_profile, name="add-class"),
-    path('myCourses', views.viewMyCourses, name="myCourses")
+    path('myCourses', views.viewMyCourses, name="myCourses"),
+    path('myProfile', views.myProfile,name="profile"),
+    path('student/allTutors/results/addTutor', views.add_tutor_to_profile, name="add-tutor"),
+    path('student/myTutors',views.myTutorList, name="studentTutorsList"),
+    path('tutor/myStudents', views.myStudentList, name="myStudents"),
+    path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
 ]

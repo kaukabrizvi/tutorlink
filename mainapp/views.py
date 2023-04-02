@@ -61,10 +61,11 @@ def course_list(request, mnemonic):
     # Get the list of courses for the specified department mnemonic
     url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={mnemonic}&page=1'
     response = requests.get(url + '&subject=' + s).json()
-    courses = []
+    courses = {}
 
     for c in response:
-        courses.append(c['subject'] + " " + c['catalog_nbr'])
+        name = c['subject'] + " " + c['catalog_nbr']
+        courses[name] = True
     # Render the template with the list of courses
     return render(request, 'mainapp/course_list.html', {'courses': courses})
 def select_class(request, class_title):
@@ -112,3 +113,51 @@ def viewMyCourses(request):
     }
     return render(request,"mainapp/myClasses.html", context)
 
+def myProfile(request):
+    theUser = Profile.objects.get(user=request.user)
+    if theUser.is_student:
+       return redirect('student')
+    elif theUser.is_tutor:
+        return redirect('tutor')
+    else:
+        return Http404
+
+def add_tutor_to_profile(request): #need to figure out how we're going to connect them
+        theUser = Profile.objects.get(user=request.user)
+        theTutor = Profile.objects.get(user=request.POST["tutor"])
+        if request.method == "POST":
+            theUser.connected_list.add(theTutor.user)
+            theUser.save()
+            theTutor.connected_list.add(theUser.user) #need to use .all() to retrieve associated objects
+            theTutor.save()
+            return redirect("student")
+
+def accept_student_to_profile(request): 
+        theUser = Profile.objects.get(user=request.user)
+        theStudent = Profile.objects.get(user=request.POST["student"])
+        if request.method == "POST":
+            theUser.accepted_list.add(theStudent.user)
+            theUser.connected_list.remove(theStudent.user)
+            theUser.save()
+            theStudent.accepted_list.add(theUser.user)
+            theStudent.connected_list.remove(theUser.user)  
+            theStudent.save()
+            return redirect("tutor")
+
+def myTutorList(request):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "requests" : user.connected_list.all(),
+        "tutors" : user.accepted_list.all()
+    }
+    return render(request, "mainapp/myTutors.html", context)
+
+def myStudentList(request):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "students" : user.connected_list.all(),
+        "accepted" : user.accepted_list.all()
+    }
+    return render(request, "mainapp/myStudents.html", context)
+
+    
