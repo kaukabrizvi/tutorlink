@@ -61,10 +61,11 @@ def course_list(request, mnemonic):
     # Get the list of courses for the specified department mnemonic
     url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={mnemonic}&page=1'
     response = requests.get(url + '&subject=' + s).json()
-    courses = []
+    courses = {}
 
     for c in response:
-        courses.append(c['subject'] + " " + c['catalog_nbr'])
+        name = c['subject'] + " " + c['catalog_nbr']
+        courses[name] = True
     # Render the template with the list of courses
     return render(request, 'mainapp/course_list.html', {'courses': courses})
 def select_class(request, class_title):
