@@ -4,6 +4,12 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import requests
 
+class TutorSesh(models.Model):
+    tutor = models.OneToOneField(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
+    student = models.OneToOneField(User, on_delete=models.CASCADE, related_name= "student_scheduled")
+    date = models.DateField()
+    time = models.TimeField()
+
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
@@ -12,6 +18,7 @@ class Profile(models.Model):
         classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
         accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
+        #schedule_list = models.ForeignKey(TutorSesh, on_delete=models.CASCADE)
         def __str__(self):
                 return str(self.user)
 

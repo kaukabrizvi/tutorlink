@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.urls import reverse
 from django.shortcuts import redirect
-from .models import Profile, Course
+from .models import Profile, Course, TutorSesh
+from .forms import TutorSeshForm
 import requests
 # Create your views here.
 
@@ -100,10 +101,12 @@ def getAllTutors(request):
 class SearchResultsView(ListView):
     model = Profile
     template_name = "mainapp/tutorList.html"
-    def get_queryset(self):
+    form_class = TutorSeshForm
+    def get(self,request):
+        form = self.form_class()
         query = self.request.GET.get("q")
         found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
-        return found_tutors
+        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
 
 def viewMyCourses(request):
     classes = Profile.objects.filter(user = request.user).values("classes")
@@ -160,4 +163,10 @@ def myStudentList(request):
     }
     return render(request, "mainapp/myStudents.html", context)
 
-    
+
+# def mySchedule(request):
+#     context= {
+
+#     }
+#     return render(request,"mainapp/scedule.html",context)
+
