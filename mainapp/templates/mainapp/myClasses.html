@@ -1,6 +1,11 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
 <h1>Your Courses</h1>
 <ul>
 {% for name in courses %}
     <li>{{ name }}</li>
 {% endfor %}
 </ul>
+{% endblock %}

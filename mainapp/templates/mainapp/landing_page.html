@@ -1,11 +1,8 @@
+{% extends 'mainapp/base.html' %}
 {% load static %}
 {% load socialaccount %}
 
-<html>
-    <head>
-        <title> Tutor Me </title>
-    </head>
-    <body>
+{% block content %}
     <h1><center>Tutor Me</center></h1>
     {% if user.is_authenticated %}
         {% for profile in Profiles %}
@@ -19,19 +16,32 @@
                     <center><p>Welcome, {{ user.username }}. Please use the buttons below to indicate whether you are a tutor or student.</p></center>
                     <form method="POST" action="{% url 'apply-type' %}">
                         {% csrf_token %}
-                        <center><button class= "btn btn-info" name="tutorbtn" type="submit".>I am a Tutor</button></center>
-                        <center><button class= "btn btn-info" name="studentbtn" type="submit">I am a Student</button></center>
+                        <center><button class="btn btn-info" name="tutorbtn" type="submit">I am a Tutor</button></center>
+                        <center><button class="btn btn-info" name="studentbtn" type="submit">I am a Student</button></center>
                     </form>
                 {% endif %}
             {% endif %}
         {% endfor %}
-        <center><a href="changerole/" class="btn btn-info">Remove Role</a></center>
-        <center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
+        <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{% static "images/user.png" %}" width="30" height="30" alt="Dropdown Image">
+            </a>
+          
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
+              <li><a class="dropdown-item" href="accounts/logout/">Logout</a>
+            </ul>
+          </div>
         <p><center><a href="departments">View Classes</a></center></p>
         <p><center><a href="myProfile">My Profile</a></center></p>
     {% else %}
         <p><center>Welcome to TutorLink! Please login using the button below.</center></p>
         <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
     {% endif %}
-    </body>
-</html>
+{% endblock %}
+
+
+
+
+
+

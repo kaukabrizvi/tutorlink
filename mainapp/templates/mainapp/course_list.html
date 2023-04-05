@@ -1,3 +1,7 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
 <h1>{{ subject }} Courses</h1>
 <ul>
 {% for course in courses %}
@@ -6,3 +10,4 @@
     <li>No courses found.</li>
 {% endfor %}
 </ul>
+{% endblock %}

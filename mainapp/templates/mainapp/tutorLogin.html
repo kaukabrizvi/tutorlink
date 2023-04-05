@@ -1,4 +1,7 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
 {% load socialaccount %}
+{% block content %}
 <html>
 <body>
 <h1>Tutor Login </h1>
@@ -11,7 +14,15 @@
 <a href="departments">View all Classes</a>
 <a href="{% url 'myCourses' %}">My Classes</a>
 <a href="{% url 'myStudents' %}">My Students</a>
-<center><a href="accounts/logout/" class="btn btn-primary stretched-link">Logout</a></center>
-<center><a href="{% url 'index' %}" class="btn btn-primary stretched-link">Main Page</a></center>
-<center><a href="changerole/" class="btn btn-primary stretched-link">Change Role</a></center>
+<div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="{% static "images/user.png" %}" width="30" height="30" alt="Dropdown Image">
+  </a>
+
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
+    <li><a class="dropdown-item" href="accounts/logout/">Logout</a>
+  </ul>
+</div>
 </html>
+{% endblock %}

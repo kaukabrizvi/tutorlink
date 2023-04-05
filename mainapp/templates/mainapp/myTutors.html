@@ -1,3 +1,7 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
 <h1>Your Pending Requests</h1>
 
 {% for request in requests %}
@@ -8,3 +12,4 @@
 {% for tutor in tutors %}
 <li>{{tutor}}</li>
 {% endfor %}
+{% endblock %}

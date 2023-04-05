@@ -1,4 +1,9 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
 <html>
+
 <head>
     <title>{{ subject }} {{ catalog_nbr }}</title>
 </head>
@@ -12,3 +17,4 @@
     </form>
 </body>
 </html>
+{% endblock %}

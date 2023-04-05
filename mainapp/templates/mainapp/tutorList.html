@@ -1,4 +1,7 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
 {% load socialaccount %}
+{% block content %}
 <h1>Tutor List</h1>
 <form action="{% url 'tutorSearch' %}" method="get">
     <input name="q" type="text" placeholder="Search...">
@@ -12,3 +15,4 @@
     <br>
     <button type="submit">Request Selected Tutors</button>
 </form>
+{% endblock %}

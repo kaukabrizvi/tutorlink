@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TutorLink</title>
+    <!-- Include Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Set background color */
+        body {
+            background-color: #e9ecef; /* Replace with your desired background color */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Set footer styles */
+        .footer {
+            background-color: #343a40; /* Replace with your desired footer color */
+            color: #fff; /* Set text color for footer */
+            padding: 20px;
+        }
+
+        /* Set content block styles */
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your page content here -->
+    <h1>{% block header %}<a href="{% url 'index' %}">TutorLink</a>{% endblock %}</h1>
+
+    <!-- Content block -->
+    <div class="container content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>© 2023 TutorLink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap 5 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Include JQuery -->
+    <script type="text/javascript" src="/jquery/jquery-3.6.0.min.js"></script>
+</body>
+</html>
