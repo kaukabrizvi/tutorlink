@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from .models import Profile, Course, TutorSesh
 from .forms import TutorSeshForm
+from calendar import HTMLCalendar
 import requests
 # Create your views here.
 
@@ -133,18 +134,21 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 tutor=theTutor.user,
                 student = theUser.user,
                 date = request.POST["date"],
-                time = request.POST["time"])
+                time = request.POST["time"],)
+            theSesh.save()
             theUser.connected_list.add(theTutor.user)
             theUser.schedule_list.add(theSesh)
             theUser.save()
-            theTutor.connected_list.add(theUser.user) #need to use .all() to retrieve associated objects
+            theTutor.connected_list.add(theUser.user)
+            theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
             theTutor.save()
             return redirect("student")
 
 def accept_student_to_profile(request): 
-        theUser = Profile.objects.get(user=request.user)
-        theStudent = Profile.objects.get(user=request.POST["student"])
-        theSesh = theStudent.schedule_list.get(tutor=theUser)
+        theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
+        theUser = Profile.objects.get(user=theSesh.tutor)
+        theStudent = Profile.objects.get(user=theSesh.student)
+        #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
         if request.method == "POST":
             theUser.accepted_list.add(theStudent.user)
             theUser.connected_list.remove(theStudent.user)
@@ -159,7 +163,8 @@ def myTutorList(request):
     user = Profile.objects.get(user=request.user)
     context = {
         "requests" : user.connected_list.all(),
-        "tutors" : user.accepted_list.all()
+        "tutors" : user.accepted_list.all(),
+        "seshs" : user.schedule_list.all()
     }
     return render(request, "mainapp/myTutors.html", context)
 
@@ -167,7 +172,8 @@ def myStudentList(request):
     user = Profile.objects.get(user=request.user)
     context = {
         "students" : user.connected_list.all(),
-        "accepted" : user.accepted_list.all()
+        "accepted" : user.accepted_list.all(),
+        "seshs" : user.schedule_list.all(),
     }
     return render(request, "mainapp/myStudents.html", context)
 

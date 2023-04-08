@@ -6,13 +6,21 @@
 <form action="{% url 'accept-student' %}" method="POST">
     {% csrf_token %}
 {% for student in students %}
-<input name="student" type="checkbox" value="{{student.id}}">{{student}}</input>
+{% for sesh in seshs %}
+    {% if sesh.student == student %}
+    <input name="sesh" type="checkbox" value="{{sesh.id}}">{{student}} {{sesh.date}} {{sesh.time}}</input>
+    {% endif %}
+{% endfor %}
 {% endfor %}
 <br>
     <button type="submit">Accept Selected Students</button>
 </form>
 <h1>Your Students</h1>
 {% for accept in accepted %}
-<li>{{accept}}</li>
+{% for sesh in seshs %}
+    {% if sesh.student == accept %}
+<li>{{accept}} {{sesh.date}}{{sesh.time}}</li>
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endblock %}

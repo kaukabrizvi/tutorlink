@@ -5,8 +5,8 @@ from django.db.models.signals import post_save
 import requests
 
 class TutorSesh(models.Model):
-    tutor = models.OneToOneField(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
-    student = models.OneToOneField(User, on_delete=models.CASCADE, related_name= "student_scheduled")
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "student_scheduled")
     date = models.DateField()
     time = models.TimeField()
 
