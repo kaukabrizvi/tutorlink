@@ -128,8 +128,8 @@ def myProfile(request):
 
 def add_tutor_to_profile(request): #need to figure out how we're going to connect them
         theUser = Profile.objects.get(user=request.user)
-        theTutor = Profile.objects.get(user=request.POST["tutor"])
-        if request.method == "POST":
+        if "tutor" in request.POST:
+            theTutor = Profile.objects.get(user=request.POST["tutor"])
             theSesh = TutorSesh.objects.create(
                 tutor=theTutor.user,
                 student = theUser.user,
@@ -143,7 +143,8 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
             theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
             theTutor.save()
             return redirect("student")
-
+        else:
+            return myProfile(request)
 def accept_student_to_profile(request): 
         theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
         theUser = Profile.objects.get(user=theSesh.tutor)
