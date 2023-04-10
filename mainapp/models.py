@@ -20,8 +20,8 @@ class Profile(models.Model):
         email = models.CharField(max_length=100)
         phone_number = models.CharField(max_length=13) # not sure if we want to include this as optional
         hourly_rate = models.IntegerField()
-        availability_date = CharField() # ex: 01 04 23 for January 4th, 2023
-        availability_time = IntegerField() # Military Time may be easier to use
+        availability_date = DateField() 
+        availability_time = TimeField()
 
         classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
