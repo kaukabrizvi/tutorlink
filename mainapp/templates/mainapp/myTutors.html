@@ -5,11 +5,19 @@
 <h1>Your Pending Requests</h1>
 
 {% for request in requests %}
-<li>{{request}}</li>
+    {% for sesh in seshs %}
+        {% if sesh.tutor == request %}
+        <li>{{request}} {{sesh.date}} {{sesh.time}}</li>
+        {% endif %}
+    {% endfor %}
 {% endfor %}
 <h1>Your Tutors</h1>
 
 {% for tutor in tutors %}
-<li>{{tutor}}</li>
+    {% for sesh in seshs %}
+        {% if sesh.tutor == tutor %}
+            <li>{{tutor}} {{sesh.date}} {{sesh.time}}</li>
+            {% endif %}
+    {% endfor %}
 {% endfor %}
 {% endblock %}

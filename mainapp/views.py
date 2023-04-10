@@ -2,11 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.db import transaction
-from .models import Profile, Class
+from .models import Profile, Class, TutorSesh
+from .forms import TutorSeshForm
+from calendar import HTMLCalendar
+
 import requests
 # Create your views here.
 
@@ -101,10 +104,12 @@ def getAllTutors(request):
 class SearchResultsView(ListView):
     model = Profile
     template_name = "mainapp/tutorList.html"
-    def get_queryset(self):
+    form_class = TutorSeshForm
+    def get(self,request):
+        form = self.form_class()
         query = self.request.GET.get("q")
         found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
-        return found_tutors
+        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
 
 def viewMyCourses(request):
     classes = Profile.objects.filter(user = request.user).values("classes")
@@ -125,23 +130,35 @@ def myProfile(request):
 
 def add_tutor_to_profile(request): #need to figure out how we're going to connect them
         theUser = Profile.objects.get(user=request.user)
-        theTutor = Profile.objects.get(user=request.POST["tutor"])
-        if request.method == "POST":
+        if "tutor" in request.POST:
+            theTutor = Profile.objects.get(user=request.POST["tutor"])
+            theSesh = TutorSesh.objects.create(
+                tutor=theTutor.user,
+                student = theUser.user,
+                date = request.POST["date"],
+                time = request.POST["time"],)
+            theSesh.save()
             theUser.connected_list.add(theTutor.user)
+            theUser.schedule_list.add(theSesh)
             theUser.save()
-            theTutor.connected_list.add(theUser.user) #need to use .all() to retrieve associated objects
+            theTutor.connected_list.add(theUser.user)
+            theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
             theTutor.save()
             return redirect("student")
-
+        else:
+            return myProfile(request)
 def accept_student_to_profile(request): 
-        theUser = Profile.objects.get(user=request.user)
-        theStudent = Profile.objects.get(user=request.POST["student"])
+        theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
+        theUser = Profile.objects.get(user=theSesh.tutor)
+        theStudent = Profile.objects.get(user=theSesh.student)
+        #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
         if request.method == "POST":
             theUser.accepted_list.add(theStudent.user)
             theUser.connected_list.remove(theStudent.user)
             theUser.save()
             theStudent.accepted_list.add(theUser.user)
             theStudent.connected_list.remove(theUser.user)  
+            theUser.schedule_list.add(theSesh)
             theStudent.save()
             return redirect("tutor")
 
@@ -149,7 +166,8 @@ def myTutorList(request):
     user = Profile.objects.get(user=request.user)
     context = {
         "requests" : user.connected_list.all(),
-        "tutors" : user.accepted_list.all()
+        "tutors" : user.accepted_list.all(),
+        "seshs" : user.schedule_list.all()
     }
     return render(request, "mainapp/myTutors.html", context)
 
@@ -157,7 +175,8 @@ def myStudentList(request):
     user = Profile.objects.get(user=request.user)
     context = {
         "students" : user.connected_list.all(),
-        "accepted" : user.accepted_list.all()
+        "accepted" : user.accepted_list.all(),
+        "seshs" : user.schedule_list.all(),
     }
     return render(request, "mainapp/myStudents.html", context)
 
@@ -190,4 +209,10 @@ def load_from_api(request):
 
     return render(request, 'mainapp/load_from_api.html')
 
-    
+
+# def mySchedule(request):
+#     context= {
+
+#     }
+#     return render(request,"mainapp/scedule.html",context)
+

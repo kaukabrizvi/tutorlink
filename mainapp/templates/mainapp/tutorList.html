@@ -9,10 +9,11 @@
 
 <form action="{% url 'add-tutor' %}" method="POST">
     {% csrf_token %}
-    {% for tutor in object_list %}
+    {% for tutor in tutors %}
         <input name="tutor" type="checkbox" value="{{tutor.id}}">{{tutor.user.username}}</input>
     {% endfor %}
     <br>
+    {{form.as_p}}
     <button type="submit">Request Selected Tutors</button>
 </form>
 {% endblock %}
