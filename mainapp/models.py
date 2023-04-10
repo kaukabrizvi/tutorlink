@@ -15,6 +15,14 @@ class Profile(models.Model):
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
         is_tutor = models.BooleanField(verbose_name="is_tutor", default=False)
         is_student = models.BooleanField(verbose_name="is_student", default=False)
+
+        # bio info for profile page
+        email = models.CharField(max_length=100)
+        phone_number = models.CharField(max_length=13) # not sure if we want to include this as optional
+        hourly_rate = models.IntegerField()
+        availability_date = CharField() # ex: 01 04 23 for January 4th, 2023
+        availability_time = IntegerField() # Military Time may be easier to use
+
         classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
         accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
