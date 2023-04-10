@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 from django.urls import reverse
 from django.shortcuts import redirect
-from .models import Profile, Course
+from django.db import transaction
+from .models import Profile, Class
 import requests
 # Create your views here.
 
@@ -159,5 +160,34 @@ def myStudentList(request):
         "accepted" : user.accepted_list.all()
     }
     return render(request, "mainapp/myStudents.html", context)
+
+def load_from_api(request):
+    term = '1238'
+    # Get the list of department mnemonics
+    options_url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term={term}'
+    response = requests.get(options_url).json()
+    mnemonics = []
+    # Render the template with the list of mnemonics
+    for s in response['subjects']:
+        mnemonics.append(s['subject'])
+    classes = {}
+    for c in mnemonics:
+        s = c.upper()
+        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}'
+        response = requests.get(url + '&subject=' + s + '&page=1').json()
+        for x in response:
+            name = x['subject'] + " " + x['catalog_nbr'] + " " + x['descr']
+            classes[name] = True
+    url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}'
+    courses = []
+    for key in classes:
+        n = key.split()
+        descr = " ".join(n[2:])
+        courses.append(Class(subject=n[0], catalog_nbr=n[1], descr=descr))
+
+    with transaction.atomic():
+        Class.objects.bulk_create(courses)
+
+    return render(request, 'mainapp/load_from_api.html')
 
     

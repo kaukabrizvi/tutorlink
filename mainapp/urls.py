@@ -41,4 +41,5 @@ urlpatterns = [
     path('student/myTutors',views.myTutorList, name="studentTutorsList"),
     path('tutor/myStudents', views.myStudentList, name="myStudents"),
     path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
+    path('load_from_api/', views.load_from_api, name='load_from_api'),
 ]

@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -24,20 +24,14 @@ class Profile(models.Model):
         def save_user_profile(sender, instance, **kwargs):
                 instance.profile.save()
 
-class Course(models.Model):
-    subject = models.CharField(max_length=100)
-    catalog_number = models.CharField(max_length=100)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    instructor = models.CharField(max_length=255)
-    credits = models.IntegerField()
-    prereqs = models.TextField(blank=True)
-    coreqs = models.TextField(blank=True)
-    term = models.CharField(max_length=6)
-    meeting_times = models.JSONField(default=list)
+class Class(models.Model):
+    subject = models.CharField(max_length=50)
+    catalog_nbr = models.CharField(max_length=50)
+    descr = models.TextField()
+
 
     def __str__(self):
-        return f"{self.subject} {self.catalog_number} - {self.title}"
+        return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 class ClassList(models.Model):
     API_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1"
 
