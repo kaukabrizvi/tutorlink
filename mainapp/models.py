@@ -27,7 +27,6 @@ class Profile(models.Model):
 
 
         # bio info for profile page
-        email = models.CharField(max_length=100)
         phone_number = models.CharField(max_length=13) # not sure if we want to include this as optional
         hourly_rate = models.IntegerField()
         availability_date = DateField() 
