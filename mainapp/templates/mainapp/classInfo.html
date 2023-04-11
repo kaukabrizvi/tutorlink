@@ -10,11 +10,19 @@
 <body>
     <h1>{{ subject }} {{ catalog_nbr }}</h1>
     <p>{{ descr }}</p>
-    <form method="POST" action="{% url 'add-class' %}">
-        {% csrf_token %}
-        <p>Would you like to add this class to your profile?</p>
-        <button type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Yes</button>
-    </form>
+    {% if can_add_class %}
+        <form method="POST" action="{% url 'add-class' %}">
+            {% csrf_token %}
+            <p>Would you like to add this class to your profile?</p>
+            <button type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Yes</button>
+        </form>
+    {% else %}
+        <p>This class is already in your profile.</p>
+    {% endif %}
+    <h2>Tutors for {{ subject }} {{ catalog_nbr }}</h2>
+    {% for tutor in tutors %}
+        <li>{{ tutor }}</li>
+    {% endfor %}
 </body>
 </html>
 {% endblock %}

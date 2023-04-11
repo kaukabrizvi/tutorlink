@@ -9,13 +9,21 @@ class TutorSesh(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "student_scheduled")
     date = models.DateField()
     time = models.TimeField()
-
+class Class(models.Model):
+    id = models.IntegerField(primary_key=True)
+    subject = models.CharField(max_length=50)
+    catalog_nbr = models.CharField(max_length=50)
+    descr = models.TextField()
+    tutors = models.ManyToManyField(User, related_name="tutors", blank=True)
+    title = str(subject) + " " + str(catalog_nbr)
+    def __str__(self):
+        return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
         is_tutor = models.BooleanField(verbose_name="is_tutor", default=False)
         is_student = models.BooleanField(verbose_name="is_student", default=False)
-        classes = models.JSONField(default=[])
+        classes = models.ManyToManyField(Class, related_name="classes", blank=True)
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
         accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
         schedule_list = models.ManyToManyField(TutorSesh, related_name="schedule_list", blank=True)
@@ -31,14 +39,7 @@ class Profile(models.Model):
         def save_user_profile(sender, instance, **kwargs):
                 instance.profile.save()
 
-class Class(models.Model):
-    subject = models.CharField(max_length=50)
-    catalog_nbr = models.CharField(max_length=50)
-    descr = models.TextField()
 
-
-    def __str__(self):
-        return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 class ClassList(models.Model):
     API_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1"
 
