@@ -9,6 +9,8 @@ from django.db import transaction
 from .models import Profile, Class, TutorSesh
 from .forms import TutorSeshForm
 from calendar import HTMLCalendar
+from django.db.models import Q
+from .forms import ClassSearchForm
 
 import requests
 # Create your views here.
@@ -85,14 +87,35 @@ def select_class(request, class_title):
         'descr': classInfo['descr'],
     })
 def add_class_to_profile(request):
-    profile = request.user.profile
     if request.method == 'POST':
-        profile.classes.append(request.POST["add_class"])
-        profile.save()
-        return redirect('department_list')
+        print(request.POST)
+        class_val = request.POST["add_class"]  # Updated line
+        subject, catalog_nbr = class_val.split(" ")
+        class_obj = Class.objects.get(subject=subject, catalog_nbr=catalog_nbr)
+        profile = request.user.profile
+        profile.classes.add(class_obj)
+        # Check if the user is a tutor
+        if request.user.profile.is_tutor:
+            
+            
+            # Add the user to the class's list of tutors
+            class_obj.tutors.add(request.user)
+            
+        return redirect('myCourses')
     
     return render(request, 'mainApp/classinfo.html', {'course': course})
-
+def expand_class(request, course_id):
+    course = get_object_or_404(Class, id=course_id)
+    user = request.user
+    can_add_class = not user.profile.classes.filter(id=course_id).exists()
+    tutors = list(course.tutors.all())
+    return render(request, "mainapp/classInfo.html", {
+        'subject': course.subject,
+        'catalog_nbr': course.catalog_nbr,
+        'descr': course.descr,
+        'can_add_class': can_add_class,
+        'tutors': tutors
+    })
 def getAllTutors(request):
     tutors = Profile.objects.filter(is_tutor = False)
     context = {
@@ -112,12 +135,12 @@ class SearchResultsView(ListView):
         return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
 
 def viewMyCourses(request):
-    classes = Profile.objects.filter(user = request.user).values("classes")
-    print(classes[0]["classes"])
+    profile = request.user.profile
+    classes = profile.classes.all()
     context = {
-        "courses" : classes[0]["classes"]
+        "courses" : classes
     }
-    return render(request,"mainapp/myClasses.html", context)
+    return render(request, "mainapp/myClasses.html", context)
 
 def myProfile(request):
     theUser = Profile.objects.get(user=request.user)
@@ -215,4 +238,45 @@ def load_from_api(request):
 
 #     }
 #     return render(request,"mainapp/scedule.html",context)
+
+
+def search_classes(request):
+    if request.method != 'GET':
+        form = ClassSearchForm()
+
+        context = {'form': form}
+        return render(request, 'mainapp/search_classes.html', context)
+    if request.method == 'GET':
+        form = ClassSearchForm(request.GET)
+        if form.is_valid():
+            subject = form.cleaned_data.get('subject')
+            catalog_nbr = form.cleaned_data.get('catalog_nbr')
+            descr = form.cleaned_data.get('descr')
+
+            query = Q()
+
+            if subject:
+                query &= Q(subject__icontains=subject)
+
+            if catalog_nbr:
+                query &= Q(catalog_nbr__icontains=catalog_nbr)
+
+            if descr:
+                query &= Q(descr__icontains=descr)
+
+            classes = Class.objects.filter(query)
+
+            context = {
+                'classes': classes,
+                'form': form
+            }
+
+            return render(request, 'mainapp/search_results.html', context)
+
+    else:
+        form = ClassSearchForm()
+
+    context = {'form': form}
+    return render(request, 'mainapp/search_classes.html', context)
+
 

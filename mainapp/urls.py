@@ -31,7 +31,7 @@ urlpatterns = [
     path('changerole/', views.changeRole, name='change-role'),
     path('departments/', views.department_list, name='department_list'),
     path('courses/<str:mnemonic>/', views.course_list, name='course_list'),
-    path('classes/<str:class_title>/', views.select_class, name='select_class'),
+    #path('classes/<str:class_title>/', views.select_class, name='select_class'),
     path('student/allTutors', views.getAllTutors, name="tutorList"),
     path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch'),
     path('classadded', views.add_class_to_profile, name="add-class"),
@@ -42,5 +42,7 @@ urlpatterns = [
     path('tutor/myStudents', views.myStudentList, name="myStudents"),
     path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
     path('load_from_api/', views.load_from_api, name='load_from_api'),
+    path('search_classes/', views.search_classes, name='search_classes'),
+    path('classes/<int:course_id>/', views.expand_class, name='expand_class')
     #path('mySchedule', name ="mySchedule")
 ]

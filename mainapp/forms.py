@@ -19,3 +19,9 @@ class TutorSeshForm(ModelForm):
             'date': DateInput(),
             'time': TimeInput()
         }
+
+
+class ClassSearchForm(forms.Form):
+    subject = forms.CharField(label='Subject', max_length=50, required=False)
+    catalog_nbr = forms.CharField(label='Class Number', max_length=50, required=False)
+    descr = forms.CharField(label='Class Name', max_length=100, required=False)
