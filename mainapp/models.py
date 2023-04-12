@@ -24,11 +24,6 @@ class Profile(models.Model):
         is_tutor = models.BooleanField(verbose_name="is_tutor", default=False)
         is_student = models.BooleanField(verbose_name="is_student", default=False)
         classes = models.ManyToManyField(Class, related_name="classes", blank=True)
-
-
-        
-
-        #classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
         accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
         schedule_list = models.ManyToManyField(TutorSesh, related_name="schedule_list", blank=True)
