@@ -26,14 +26,9 @@ class Profile(models.Model):
         classes = models.ManyToManyField(Class, related_name="classes", blank=True)
 
 
-        # bio info for profile page
-        email = models.CharField(max_length=100)
-        phone_number = models.CharField(max_length=13) # not sure if we want to include this as optional
-        hourly_rate = models.IntegerField()
-        availability_date = DateField() 
-        availability_time = TimeField()
+        
 
-        classes = models.JSONField(default=[])
+        #classes = models.JSONField(default=[])
         connected_list = models.ManyToManyField(User,related_name="connected_list", blank=True)
         accepted_list = models.ManyToManyField(User,related_name="accepted_list", blank=True)
         schedule_list = models.ManyToManyField(TutorSesh, related_name="schedule_list", blank=True)
