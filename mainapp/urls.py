@@ -43,6 +43,7 @@ urlpatterns = [
     path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
     path('load_from_api/', views.load_from_api, name='load_from_api'),
     path('search_classes/', views.search_classes, name='search_classes'),
-    path('classes/<int:course_id>/', views.expand_class, name='expand_class')
+    path('classes/<int:course_id>/', views.expand_class, name='expand_class'),
+    path('editProfile', views.ProfileEditView.as_view(), name="edit_profile"),
     #path('mySchedule', name ="mySchedule")
 ]

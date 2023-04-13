@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.db import transaction
 from .models import Profile, Class, TutorSesh
-from .forms import TutorSeshForm
+from .forms import TutorSeshForm, UpdateTheProfileForm
 from calendar import HTMLCalendar
 from django.db.models import Q
 from .forms import ClassSearchForm
@@ -279,4 +279,9 @@ def search_classes(request):
     context = {'form': form}
     return render(request, 'mainapp/search_classes.html', context)
 
+
+class ProfileEditView(ListView):
+    model = Profile
+    template_name = "mainapp/edit_profile.html"
+    form_class = UpdateTheProfileForm
 

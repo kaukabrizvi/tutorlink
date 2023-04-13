@@ -1,0 +1,10 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block content %}
+    <h1>Edit your Profile</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Make Changes</button>
+    </form>
+{% endblock %}
