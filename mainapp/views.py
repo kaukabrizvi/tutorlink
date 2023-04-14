@@ -284,4 +284,41 @@ class ProfileEditView(ListView):
     model = Profile
     template_name = "mainapp/edit_profile.html"
     form_class = UpdateTheProfileForm
+    def get(self,request):
+        form = self.form_class()
+        theUser = Profile.objects.get(user=request.user)
+        form.fields['username'].initial = theUser.user.username
+        form.fields['monday'].initial = theUser.monday
+        form.fields['tuesday'].initial = theUser.tuesday
+        form.fields['wednesday'].initial = theUser.wednesday
+        form.fields['thursday'].initial = theUser.thursday
+        form.fields['friday'].initial = theUser.friday
+        form.fields['saturday'].initial = theUser.saturday
+        form.fields['sunday'].initial = theUser.sunday
+        form.fields['phone_number'].initial = theUser.phone_number
+        form.fields['avail_start'].initial = theUser.avail_start
+        form.fields['avail_end'].initial = theUser.avail_end
+        return render(request,self.template_name,{'form' : form})
 
+def ProfileEdit(request):
+    theUser = Profile.objects.get(user=request.user)
+    days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
+    for key in request.POST:
+        if key == "username":
+            print("IN HERE")
+            theUser.user.username = request.POST[key]
+            print(theUser.user.username)
+            theUser.user.save()
+        elif hasattr(theUser,key):
+            if request.POST[key] == "on": #this is for the checkboxes
+                setattr(theUser,key,True)
+                days_list.remove(key)
+            else:
+                setattr(theUser,key,request.POST[key])
+    for day in days_list:
+        setattr(theUser,day,False)
+    theUser.save()
+    if theUser.is_tutor:
+        return redirect('tutor')
+    else:
+        return redirect('student')
