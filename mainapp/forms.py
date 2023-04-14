@@ -26,7 +26,7 @@ class ClassSearchForm(forms.Form):
     catalog_nbr = forms.CharField(label='Class Number', max_length=50, required=False)
     descr = forms.CharField(label='Class Name', max_length=100, required=False)
 
-class UpdateTheProfileForm(forms.Form):
+class UpdateTheTutorProfileForm(forms.Form):
     username = forms.CharField(label="Username",widget=forms.Textarea)
     monday = forms.BooleanField(label= "Monday", required=False)
     tuesday = forms.BooleanField(label ="Tuesday",required=False)
@@ -39,3 +39,7 @@ class UpdateTheProfileForm(forms.Form):
     avail_start = forms.TimeField(label="Availability Start", widget=TimeInput)
     avail_end = forms.TimeField(label="Availibility End", widget=TimeInput)
 
+
+class UpdateTheStudentProfileForm(forms.Form):
+    username = forms.CharField(label="Username",widget=forms.Textarea)
+    phone_number = forms.CharField(label="Phone Number",max_length=12,required=False,)

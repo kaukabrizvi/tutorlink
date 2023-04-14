@@ -44,7 +44,9 @@ urlpatterns = [
     path('load_from_api/', views.load_from_api, name='load_from_api'),
     path('search_classes/', views.search_classes, name='search_classes'),
     path('classes/<int:course_id>/', views.expand_class, name='expand_class'),
-    path('editProfile', views.ProfileEditView.as_view(), name="edit_profile"),
-    path('makeEdits/', views.ProfileEdit, name='make-changes'),
+    path('tutor/editProfile', views.TutorProfileEditView.as_view(), name="edit_profile_tutor"),
+    path('tutor/savechanges/', views.TutorProfileEdit, name='make-changes-tutor'),
+    path('student/editProfile', views.StudentProfileEditView.as_view(), name='edit_profile_student'),
+    path('student/savechanges/', views.StudentProfileEdit, name='make-changes-student'),
     #path('mySchedule', name ="mySchedule")
 ]

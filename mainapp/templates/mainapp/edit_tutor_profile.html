@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <h1>Edit your Profile</h1>
-    <form method="POST" action="{%url 'make-changes' %}">
+    <form method="POST" action="{%url 'make-changes-tutor' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Make Changes</button>

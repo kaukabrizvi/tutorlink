@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.db import transaction
 from .models import Profile, Class, TutorSesh
-from .forms import TutorSeshForm, UpdateTheProfileForm
+from .forms import TutorSeshForm, UpdateTheTutorProfileForm, UpdateTheStudentProfileForm
 from calendar import HTMLCalendar
 from django.db.models import Q
 from .forms import ClassSearchForm
@@ -280,10 +280,13 @@ def search_classes(request):
     return render(request, 'mainapp/search_classes.html', context)
 
 
-class ProfileEditView(ListView):
+class TutorProfileEditView(ListView):
     model = Profile
-    template_name = "mainapp/edit_profile.html"
-    form_class = UpdateTheProfileForm
+    template_name = "mainapp/edit_tutor_profile.html"
+    form_class = UpdateTheTutorProfileForm 
+    """
+    ADD SEPERATE FORM FOR TUTOR AND STUDENT SINCE THEY'RE GONNA HAVE DIFFERENT FIELDS
+    """
     def get(self,request):
         form = self.form_class()
         theUser = Profile.objects.get(user=request.user)
@@ -300,7 +303,7 @@ class ProfileEditView(ListView):
         form.fields['avail_end'].initial = theUser.avail_end
         return render(request,self.template_name,{'form' : form})
 
-def ProfileEdit(request):
+def TutorProfileEdit(request):
     theUser = Profile.objects.get(user=request.user)
     days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
     for key in request.POST:
@@ -318,7 +321,31 @@ def ProfileEdit(request):
     for day in days_list:
         setattr(theUser,day,False)
     theUser.save()
-    if theUser.is_tutor:
-        return redirect('tutor')
-    else:
-        return redirect('student')
+    return redirect('tutor')
+    
+
+class StudentProfileEditView(ListView):
+    model = Profile
+    template_name = "mainapp/edit_student_profile.html"
+    form_class = UpdateTheStudentProfileForm 
+    """
+    ADD SEPERATE FORM FOR TUTOR AND STUDENT SINCE THEY'RE GONNA HAVE DIFFERENT FIELDS
+    """
+    def get(self,request):
+        form = self.form_class()
+        theUser = Profile.objects.get(user=request.user)
+        form.fields['username'].initial = theUser.user.username
+        form.fields['phone_number'].initial = theUser.phone_number
+        return render(request,self.template_name,{'form' : form})
+
+def StudentProfileEdit(request):
+    theUser = Profile.objects.get(user=request.user)
+    for key in request.POST:
+        if key == "username":
+            theUser.user.username = request.POST[key]
+            print(theUser.user.username)
+            theUser.user.save()
+        else:
+            setattr(theUser,key,request.POST[key])
+    theUser.save()
+    return redirect('student')
