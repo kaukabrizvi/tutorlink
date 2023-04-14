@@ -72,3 +72,21 @@ class ClassList(models.Model):
         if not cls.objects.filter(id=1).exists():
             cls.load_classes()
         return cls.objects.get(id=1).classes
+class Review(models.Model):
+    tutor = models.ForeignKey('Tutor', on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+class Tutor(models.Model):
+    name = models.CharField(max_length=255)
+
+    def update_rating(self):
+        reviews = self.review_set.all()
+        if reviews:
+            self.rating = sum([r.rating for r in reviews]) / len(reviews)
+            self.save()
+        else:
+            self.rating = 0
+            self.save()
+    name = models.CharField(max_length=255)
