@@ -11,6 +11,8 @@ from .forms import TutorSeshForm, UpdateTheTutorProfileForm, UpdateTheStudentPro
 from calendar import HTMLCalendar
 from django.db.models import Q
 from .forms import ClassSearchForm
+from django.contrib.auth.decorators import login_required
+from .models import Tutor, Review
 
 import requests
 # Create your views here.
@@ -349,3 +351,15 @@ def StudentProfileEdit(request):
             setattr(theUser,key,request.POST[key])
     theUser.save()
     return redirect('student')
+
+@login_required
+def submit_review(request, tutor_id):
+    tutor = get_object_or_404(Tutor, id=tutor_id)
+    if request.method == 'POST':
+        rating = int(request.POST['rating'])
+        comment = request.POST['comment']
+        review = Review(tutor=tutor, student=request.user, rating=rating, comment=comment)
+        review.save()
+        tutor.update_rating()
+        return redirect('tutor_detail', tutor_id=tutor.id)
+    return render(request, 'submit_review.html', {'tutor': tutor})
