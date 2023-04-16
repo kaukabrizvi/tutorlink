@@ -10,7 +10,7 @@
 <form action="{% url 'add-tutor' %}" method="POST">
     {% csrf_token %}
     {% for tutor in tutors %}
-        <input name="tutor" type="checkbox" value="{{tutor.id}}">{{tutor.user.username}}</input>
+        <input name="tutor" type="checkbox" value="{{tutor.id}}" href=""><a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
     {% endfor %}
     <br>
     {{form.as_p}}

@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 import requests
 import datetime
 
+
 class TutorSesh(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "student_scheduled")
@@ -37,6 +38,7 @@ class Profile(models.Model):
         friday = models.BooleanField(default=False)
         saturday = models.BooleanField(default=False)
         sunday = models.BooleanField(default=False)
+        hourly_rate = models.DecimalField(default=10,decimal_places=2,max_digits=5)
 
         avail_start = models.TimeField(default=datetime.time(0,0,0))
         avail_end = models.TimeField(default=datetime.time(23,59,59))

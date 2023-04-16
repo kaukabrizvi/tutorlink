@@ -1,0 +1,37 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<h3>{{tutor.user.username}}</h3>
+Email : {{tutor.user.email}}<br>
+Phone Number : {{tutor.phone_number}}
+<h4>Classes</h4>
+    {% for class in tutor.classes.all %}
+    <li>{{class.subject}} {{class.catalog_nbr}}</li>
+    {% endfor %}
+<h4>Availibility</h4>
+    {% if tutor.monday %}
+    <li>Monday</li>
+    {% endif %}
+    {% if tutor.tuesday %}
+    <li>Tuesday</li>
+    {% endif %}
+    {% if tutor.wednesday %}
+    <li>Wednesday</li>
+    {% endif %}
+    {% if tutor.thursday %}
+    <li>Thursday</li>
+    {% endif %}
+    {% if tutor.friday %}
+    <li>Friday</li>
+    {% endif %}
+    {% if tutor.saturday %}
+    <li>Saturday</li>
+    {% endif %}
+    {% if tutor.sunday %}
+    <li>Sunday</li>
+    {% endif %}
+<h3>Times Availible</h3>
+From {{tutor.avail_start}} To {{tutor.avail_end}}
+
+{% endblock %}

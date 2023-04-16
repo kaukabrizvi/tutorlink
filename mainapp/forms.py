@@ -38,6 +38,7 @@ class UpdateTheTutorProfileForm(forms.Form):
     phone_number = forms.CharField(label="Phone Number",max_length=12,required=False,)
     avail_start = forms.TimeField(label="Availability Start", widget=TimeInput)
     avail_end = forms.TimeField(label="Availibility End", widget=TimeInput)
+    hourly_rate = forms.FloatField(label="Hourly Rate ($USD)",required=False)
 
 
 class UpdateTheStudentProfileForm(forms.Form):
