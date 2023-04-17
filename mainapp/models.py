@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import requests
 import datetime
-
+import uuid
 
 class TutorSesh(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
@@ -12,11 +12,11 @@ class TutorSesh(models.Model):
     date = models.DateField()
     time = models.TimeField()
 class Class(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=50)
     catalog_nbr = models.CharField(max_length=50)
     descr = models.TextField()
-    tutors = models.ManyToManyField(User, related_name="tutors", blank=True)
+    tutors = models.ManyToManyField(User, related_name="tutors", blank=True, default=[])
     title = str(subject) + " " + str(catalog_nbr)
     def __str__(self):
         return f"{self.subject} {self.catalog_nbr} - {self.descr}"
