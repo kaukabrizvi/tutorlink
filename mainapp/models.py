@@ -6,6 +6,7 @@ import requests
 import datetime
 import uuid
 
+
 class TutorSesh(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "tutor_scheduled")
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "student_scheduled")
@@ -20,6 +21,7 @@ class Class(models.Model):
     title = str(subject) + " " + str(catalog_nbr)
     def __str__(self):
         return f"{self.subject} {self.catalog_nbr} - {self.descr}"
+
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
