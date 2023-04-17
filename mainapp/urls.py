@@ -48,5 +48,7 @@ urlpatterns = [
     path('tutor/savechanges/', views.TutorProfileEdit, name='make-changes-tutor'),
     path('student/editProfile', views.StudentProfileEditView.as_view(), name='edit_profile_student'),
     path('student/savechanges/', views.StudentProfileEdit, name='make-changes-student'),
+    path('student/tutorProfile/<int:tutor_id>', views.getTutorProfile, name='tutor-profile'),
+   #path('student/tutorReview',)
     #path('mySchedule', name ="mySchedule")
 ]

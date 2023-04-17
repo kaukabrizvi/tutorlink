@@ -304,6 +304,7 @@ class TutorProfileEditView(ListView):
         form.fields['phone_number'].initial = theUser.phone_number
         form.fields['avail_start'].initial = theUser.avail_start
         form.fields['avail_end'].initial = theUser.avail_end
+        form.fields['hourly_rate'].initial = theUser.hourly_rate
         return render(request,self.template_name,{'form' : form})
 
 def TutorProfileEdit(request):
@@ -364,3 +365,8 @@ def submit_review(request, tutor_id):
         tutor.update_rating()
         return redirect('tutor_detail', tutor_id=tutor.id)
     return render(request, 'submit_review.html', {'tutor': tutor})
+
+
+def getTutorProfile(request,tutor_id):
+    tutor = Profile.objects.get(id=tutor_id)
+    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor})
