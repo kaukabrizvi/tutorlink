@@ -31,7 +31,7 @@ urlpatterns = [
     path('changerole/', views.changeRole, name='change-role'),
     path('departments/', views.department_list, name='department_list'),
     path('courses/<str:mnemonic>/', views.course_list, name='course_list'),
-    path('classes/<str:class_title>/', views.select_class, name='select_class'),
+    #path('classes/<str:class_title>/', views.select_class, name='select_class'),
     path('student/allTutors', views.getAllTutors, name="tutorList"),
     path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch'),
     path('classadded', views.add_class_to_profile, name="add-class"),
@@ -41,4 +41,14 @@ urlpatterns = [
     path('student/myTutors',views.myTutorList, name="studentTutorsList"),
     path('tutor/myStudents', views.myStudentList, name="myStudents"),
     path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
+    path('load_from_api/', views.load_from_api, name='load_from_api'),
+    path('search_classes/', views.search_classes, name='search_classes'),
+    path('classes/<int:course_id>/', views.expand_class, name='expand_class'),
+    path('tutor/editProfile', views.TutorProfileEditView.as_view(), name="edit_profile_tutor"),
+    path('tutor/savechanges/', views.TutorProfileEdit, name='make-changes-tutor'),
+    path('student/editProfile', views.StudentProfileEditView.as_view(), name='edit_profile_student'),
+    path('student/savechanges/', views.StudentProfileEdit, name='make-changes-student'),
+    path('student/tutorProfile/<int:tutor_id>', views.getTutorProfile, name='tutor-profile'),
+   #path('student/tutorReview',)
+    #path('mySchedule', name ="mySchedule")
 ]
