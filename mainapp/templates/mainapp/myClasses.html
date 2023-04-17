@@ -5,7 +5,7 @@
 <h1>Your Courses</h1>
 <ul>
 {% for name in courses %}
-    <li><a href="{% url 'expand_class' course_id=name.id %}">{{ name }}</a></li>
+    <li><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
