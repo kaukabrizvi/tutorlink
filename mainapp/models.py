@@ -19,8 +19,11 @@ class Class(models.Model):
     descr = models.TextField()
     tutors = models.ManyToManyField(User, related_name="tutors", blank=True, default=[])
     title = str(subject) + " " + str(catalog_nbr)
+    #def __str__(self):
+    #    return f"{self.subject} {self.catalog_nbr} - {self.descr}"
+    
     def __str__(self):
-        return f"{self.subject} {self.catalog_nbr} - {self.descr}"
+        return self.id  # acts as your post_id
 
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
