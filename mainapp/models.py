@@ -13,12 +13,14 @@ class TutorSesh(models.Model):
     date = models.DateField()
     time = models.TimeField()
 class Class(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     subject = models.CharField(max_length=50)
     catalog_nbr = models.CharField(max_length=50)
     descr = models.TextField()
     tutors = models.ManyToManyField(User, related_name="tutors", blank=True, default=[])
     title = str(subject) + " " + str(catalog_nbr)
+    class Meta:
+        unique_together = ('subject', 'catalog_nbr')
     def __str__(self):
         return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 
