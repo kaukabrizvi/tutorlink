@@ -268,7 +268,6 @@ def search_classes(request):
                 query &= Q(descr__icontains=descr)
 
             classes = Class.objects.filter(query)
-
             context = {
                 'classes': classes,
                 'form': form

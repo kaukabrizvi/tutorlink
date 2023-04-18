@@ -21,8 +21,11 @@ class Class(models.Model):
     title = str(subject) + " " + str(catalog_nbr)
     class Meta:
         unique_together = ('subject', 'catalog_nbr')
+    #def __str__(self):
+    #    return f"{self.subject} {self.catalog_nbr} - {self.descr}"
+
     def __str__(self):
-        return f"{self.subject} {self.catalog_nbr} - {self.descr}"
+        return self.id  # acts as your post_id
 
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
