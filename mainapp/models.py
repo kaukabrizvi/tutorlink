@@ -13,7 +13,7 @@ class TutorSesh(models.Model):
     date = models.DateField()
     time = models.TimeField()
 class Class(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=50)
     catalog_nbr = models.CharField(max_length=50)
     descr = models.TextField()
