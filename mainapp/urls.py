@@ -42,6 +42,7 @@ urlpatterns = [
     path('tutor/myStudents', views.myStudentList, name="myStudents"),
     path('tutor/myStudents/acceptStudent', views.accept_student_to_profile, name="accept-student"),
     path('load_from_api/', views.load_from_api, name='load_from_api'),
+    path('load_from_api_ajax/', views.load_from_api_ajax, name='load_from_api_ajax'),
     path('search_classes/', views.search_classes, name='search_classes'),
     path('classes/<uuid:course_id>/', views.expand_class, name='expand_class'),
     path('tutor/editProfile', views.TutorProfileEditView.as_view(), name="edit_profile_tutor"),

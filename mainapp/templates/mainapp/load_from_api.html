@@ -1,6 +1,20 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <h1>Load Data From API</h1>
-    <p>Data has been successfully loaded from API.</p>
+<head>
+    <!-- Include JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script>
+    $(document).ready(function(){
+        $.ajax({
+            url: "/load_from_api_ajax/",
+        }).done(function(data) {
+            $("#msg").text(data.msg);
+        });
+    });
+    </script>
+</head>
+<body>
+    <h1 id="msg">Currently Loading SIS API Data</h1>
+</body>
 {% endblock %}

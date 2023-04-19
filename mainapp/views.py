@@ -13,6 +13,7 @@ from django.db.models import Q
 from .forms import ClassSearchForm
 from django.contrib.auth.decorators import login_required
 from .models import Tutor, Review
+import json
 
 import requests
 
@@ -207,6 +208,9 @@ def myStudentList(request):
     return render(request, "mainapp/myStudents.html", context)
 
 def load_from_api(request):
+    return render(request, 'mainapp/load_from_api.html')
+
+def load_from_api_ajax(request):
     term = '1238'
     # Get the list of department mnemonics
     options_url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term={term}'
@@ -233,7 +237,12 @@ def load_from_api(request):
     with transaction.atomic():
         Class.objects.bulk_create(courses)
 
-    return render(request, 'mainapp/load_from_api.html')
+    msg = "Finished Loading SIS API Data " 
+    context = {
+        "Currently Loading SIS API Data " : msg,
+    }
+    data = json.dumps(context)
+    return HttpResponse(data, content_type = 'application/json')
 
 
 # def mySchedule(request):
