@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'requests',
     'bootstrap5',
-    'background_task',
 ]
 
 MIDDLEWARE = [
