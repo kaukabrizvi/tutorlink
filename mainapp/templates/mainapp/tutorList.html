@@ -6,7 +6,11 @@
 <form action="{% url 'tutorSearch' %}" method="get">
     <input name="q" type="text" placeholder="Search...">
 </form>
-
+{% if messages %}
+    {% for message in messages %}
+    <li>{{message}}</li>
+    {% endfor %}
+{% endif %}
 <form action="{% url 'add-tutor' %}" method="POST">
     {% csrf_token %}
     {% for tutor in tutors %}
