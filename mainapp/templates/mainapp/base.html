@@ -28,8 +28,10 @@
     </style>
 </head>
 <body>
+    {% include 'mainapp/navbar.html' %}
+    {% block header %} {% endblock %}
+
     <!-- Your page content here -->
-    <h1>{% block header %}<a href="{% url 'index' %}">TutorLink</a>{% endblock %}</h1>
 
     <!-- Content block -->
     <div class="container content">

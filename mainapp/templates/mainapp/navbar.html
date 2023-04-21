@@ -1,0 +1,32 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+	<div class="container">
+		<a href="{% url 'index' %}" class="navbar-brand mb-0 h1">
+			<img src="{% static 'images/TEMP.png' %}" width="30" height = "30"
+			class="d-inline-block align-top" alt="" style="margin-right: 3px;">
+			TutorMe
+		</a>
+
+		<ul class="nav navbar-nav ml-auto">
+			{% if user.is_authenticated %}
+			<div class="dropdown" style="position: relative; display: inline-block;">
+	            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+	                <img src="{% static 'images/user.png' %}" width="30" height="30" alt="Dropdown Image">
+	            </a>
+	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+	            	<li><a class="dropdown-item" href="{% url 'edit_profile_tutor' %}">Edit Profile</a></li>
+	            	<li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
+	              	<li><a class="dropdown-item" href="accounts/logout/">Logout</a>
+	            </ul>
+          </div>
+			{% endif %}
+		</ul>
+	</div>
+</nav>
