@@ -89,6 +89,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+#DATABASE_URL = "postgres://fwuuryehnbkanc:0639600b1039ce326aba914a7eb8a3625abe0b36cecb12d60811a1139d360bfc@ec2-3-211-6-217.compute-1.amazonaws.com:5432/d1b5eipc80rfld"
 db_from_env= dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
@@ -161,6 +164,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 SITE_ID = 2
+SESSION_COOKIE_SECURE = True
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

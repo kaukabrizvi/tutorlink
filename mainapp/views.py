@@ -13,6 +13,8 @@ from django.db.models import Q
 from .forms import ClassSearchForm
 from django.contrib.auth.decorators import login_required
 from .models import Tutor, Review
+import datetime
+from django.contrib import messages
 
 import requests
 
@@ -134,7 +136,12 @@ class SearchResultsView(ListView):
     def get(self,request):
         form = self.form_class()
         query = self.request.GET.get("q")
-        found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
+        print(request.user)
+        theUser = Profile.objects.get(user=request.user)
+        if query != None:
+            found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query).filter(classes__in=theUser.classes.all())
+        else:
+            found_tutors = None
         return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
 
 def viewMyCourses(request):
@@ -158,21 +165,35 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
         theUser = Profile.objects.get(user=request.user)
         if "tutor" in request.POST:
             theTutor = Profile.objects.get(user=request.POST["tutor"])
-            theSesh = TutorSesh.objects.create(
-                tutor=theTutor.user,
-                student = theUser.user,
-                date = request.POST["date"],
-                time = request.POST["time"],)
-            theSesh.save()
-            theUser.connected_list.add(theTutor.user)
-            theUser.schedule_list.add(theSesh)
-            theUser.save()
-            theTutor.connected_list.add(theUser.user)
-            theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
-            theTutor.save()
-            return redirect("student")
-        else:
-            return myProfile(request)
+            theDate = datetime.datetime.strptime(request.POST["date"],"%Y-%m-%d")
+            theTime = datetime.datetime.strptime(request.POST["time"],"%H:%M").time()
+            dates = { #use this to do the comparison dynamically for day of the week
+                0 : theTutor.monday,
+                1 : theTutor.tuesday,
+                2 : theTutor.wednesday,
+                3 : theTutor.thursday,
+                4 : theTutor.friday,
+                5 : theTutor.saturday,
+                6 : theTutor.sunday,
+            }
+            if theDate > datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end):
+                theSesh = TutorSesh.objects.create(
+                    tutor=theTutor.user,
+                    student = theUser.user,
+                    date = request.POST["date"],
+                    time = request.POST["time"],)
+                theSesh.save()
+                theUser.connected_list.add(theTutor.user)
+                theUser.schedule_list.add(theSesh)
+                theUser.save()
+                theTutor.connected_list.add(theUser.user)
+                theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
+                theTutor.save()
+                return redirect("student")
+            else:  
+                messages.warning(request, "Cannot request tutor when they aren't available.")
+                return HttpResponseRedirect(reverse("tutorSearch"))
+                
 def accept_student_to_profile(request): 
         theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
         theUser = Profile.objects.get(user=theSesh.tutor)
