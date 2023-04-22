@@ -23,7 +23,7 @@ class Class(models.Model):
     #    return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 
     def __str__(self):
-        return self.id  # acts as your post_id
+        return str(self.subject) + " " + str(self.catalog_nbr)  # acts as your post_id
 
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)

@@ -1,7 +1,9 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 {% load socialaccount %}
-
+{% get_providers as socialaccount_providers %}
+{% load i18n %}
+{% load account socialaccount %}
 
 {% block content %}
     {% if user.is_authenticated %}
@@ -26,8 +28,12 @@
         <p><center><a href="myProfile">My Profile</a></center></p>
     {% else %}
         <p><center>Welcome to TutorLink! Please login using the button below.</center></p>
-        <center><a href="accounts/login/" class="btn btn-primary stretched-link">Login</a></center>
-    {% endif %}
+        <div class="text-center">
+          <a class="btn btn-primary btn-lg" role="button"
+             href=" {% provider_login_url 'google' %}"
+             >Login with Google</a>
+            </div>
+        {% endif %}
 {% endblock %}
 
 

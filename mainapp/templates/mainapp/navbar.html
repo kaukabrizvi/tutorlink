@@ -27,7 +27,7 @@
 					<li><a class="dropdown-item" href="{% url 'edit_profile_student' %}">Edit Profile</a></li>
 					{% endif %}
 	            	<li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
-	              	<li><a class="dropdown-item" href="accounts/logout/">Logout</a>
+	              	<li><a class="dropdown-item" href="{% url 'admin:logout' %}">Logout</a>
 	            </ul>
           </div>
 			{% endif %}

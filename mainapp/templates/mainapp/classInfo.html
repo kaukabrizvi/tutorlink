@@ -3,26 +3,28 @@
 {% load socialaccount %}
 {% block content %}
 <html>
+    <div class="jumbotron">
+        <h1 class="display-4">
+            {{ subject }} {{ catalog_nbr }}
+        </h1>
+    <p class="lead">{{ descr }}</p>
+    <hr class="my-4">
 
-<head>
-    <title>{{ subject }} {{ catalog_nbr }}</title>
-</head>
-<body>
-    <h1>{{ subject }} {{ catalog_nbr }}</h1>
-    <p>{{ descr }}</p>
+    <p><h2>Tutors for {{ subject }} {{ catalog_nbr }}</h2></p>
+    <ul class="list-group">
+    {% for tutor in tutors %}
+        <a href="{% url 'tutor-profile' tutor_id=tutor.id %}" class="list-group-item list-group-item-action" > {{tutor}}</a>
+    {% endfor %}
+    </ul>
     {% if can_add_class %}
         <form method="POST" action="{% url 'add-class' %}">
             {% csrf_token %}
-            <p>Would you like to add this class to your profile?</p>
-            <button type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Yes</button>
+            <button class="btn btn-primary btn-md mr-3" type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Add This Class to Your Profile</button>
         </form>
     {% else %}
         <p>This class is already in your profile.</p>
     {% endif %}
-    <h2>Tutors for {{ subject }} {{ catalog_nbr }}</h2>
-    {% for tutor in tutors %}
-        <li>{{ tutor }}</li>
-    {% endfor %}
-</body>
+    </div>
+</div>
 </html>
 {% endblock %}
