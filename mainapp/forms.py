@@ -22,9 +22,9 @@ class TutorSeshForm(ModelForm):
 
 
 class ClassSearchForm(forms.Form):
-    subject = forms.CharField(label='Subject', max_length=50, required=False)
-    catalog_nbr = forms.CharField(label='Class Number', max_length=50, required=False)
-    descr = forms.CharField(label='Class Name', max_length=100, required=False)
+    subject = forms.CharField(label='Mnemonic', max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'e.g. MATH, CS'}))
+    catalog_nbr = forms.CharField(label='Class Number', max_length=50, required=False,  widget=forms.TextInput(attrs={'placeholder': 'e.g. 1010'}))
+    descr = forms.CharField(label='Class Name', max_length=100, required=False, widget=forms.TextInput(attrs={'placeholder': 'e.g. Advanced Software'}))
 
 class UpdateTheTutorProfileForm(forms.Form):
     username = forms.CharField(label="Username",widget=forms.Textarea)

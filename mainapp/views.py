@@ -32,11 +32,11 @@ def index(request):
 def assignUserType(request):
     if "tutorbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_tutor=True)
-        return redirect('tutor')
+        return redirect('index')
     
     if "studentbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_student=True)
-        return redirect('student')
+        return redirect('index')
     
 def changeRole(request):
     Profile.objects.filter(user=request.user).update(is_tutor=False)
@@ -265,11 +265,6 @@ def load_from_api(request):
 
 
 def search_classes(request):
-    if request.method != 'GET':
-        form = ClassSearchForm()
-
-        context = {'form': form}
-        return render(request, 'mainapp/search_classes.html', context)
     if request.method == 'GET':
         form = ClassSearchForm(request.GET)
         if form.is_valid():
@@ -289,6 +284,11 @@ def search_classes(request):
                 query &= Q(descr__icontains=descr)
 
             classes = Class.objects.filter(query)
+
+            if 'descr' in request.GET and request.GET['descr'] and not 'subject' in request.GET and not 'catalog_nbr' in request.GET:
+                url = f"/search_classes/?subject=&catalog_nbr=&descr={request.GET['descr']}"
+                return redirect(url)
+
             context = {
                 'classes': classes,
                 'form': form
@@ -301,7 +301,6 @@ def search_classes(request):
 
     context = {'form': form}
     return render(request, 'mainapp/search_classes.html', context)
-
 
 class TutorProfileEditView(ListView):
     model = Profile
