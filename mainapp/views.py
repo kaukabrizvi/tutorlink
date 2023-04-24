@@ -189,7 +189,7 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 theTutor.connected_list.add(theUser.user)
                 theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
                 theTutor.save()
-                return redirect("student")
+                return redirect("index")
             else:  
                 messages.warning(request, "Cannot request tutor when they aren't available.")
                 return HttpResponseRedirect(reverse("tutorSearch"))
@@ -207,7 +207,7 @@ def accept_student_to_profile(request):
             theStudent.connected_list.remove(theUser.user)  
             theUser.schedule_list.add(theSesh)
             theStudent.save()
-            return redirect("tutor")
+            return redirect("index")
 
 def myTutorList(request):
     user = Profile.objects.get(user=request.user)
@@ -344,7 +344,7 @@ def TutorProfileEdit(request):
     for day in days_list:
         setattr(theUser,day,False)
     theUser.save()
-    return redirect('tutor')
+    return redirect('index')
     
 
 class StudentProfileEditView(ListView):
@@ -371,7 +371,7 @@ def StudentProfileEdit(request):
         else:
             setattr(theUser,key,request.POST[key])
     theUser.save()
-    return redirect('student')
+    return redirect('index')
 
 @login_required
 def submit_review(request, tutor_id):

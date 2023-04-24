@@ -29,20 +29,25 @@
 		</a>
 		<ul class="nav navbar-nav ml-auto">
 			{% if user.is_authenticated %}
+        		
 			<div class="dropdown" style="position: relative; display: inline-block;">
 	            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 	                <img src="{% static 'images/user.png' %}" width="30" height="30" alt="Dropdown Image">
 	            </a>
 	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					{% if user.is_tutor %}
-	            	<li><a class="dropdown-item" href="{% url 'edit_profile_tutor' %}">Edit Profile</a></li>
-					{% else %}
-					<li><a class="dropdown-item" href="{% url 'edit_profile_student' %}">Edit Profile</a></li>
-					{% endif %}
-	            	<li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
-	              	<li><a class="dropdown-item" href="{% url 'admin:logout' %}">Logout</a>
-	            </ul>
-          </div>
+					{% for profile in Profiles %}
+            		{% if profile.user.email|stringformat:"s" == user.email|stringformat:"s" %}
+                		{% if profile.is_tutor %}
+	            		<li><a class="dropdown-item" href="{% url 'edit_profile_tutor' %}">Edit Profile</a></li>
+						{% else %}
+						<li><a class="dropdown-item" href="{% url 'edit_profile_student' %}">Edit Profile</a></li>
+						{% endif %}
+						{% endif %}
+						{% endfor %}
+	            		<li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
+	              		<li><a class="dropdown-item" href="{% url 'admin:logout' %}">Logout</a>
+	            	</ul>
+          		</div>
 			{% endif %}
 		</ul>
 	</div>
