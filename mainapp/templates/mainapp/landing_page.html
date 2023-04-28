@@ -70,7 +70,7 @@
                             <img src="{% static 'images/uva.jpg' %}" class="d-block w-100" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                               <h5>Connect with UVA Students</h5>
-                              <p>Tutorlink pairs students across grounds for pleasant tutoing experiences</p>
+                              <p>Tutorlink pairs students across grounds for pleasant tutoring experiences</p>
                             </div>
                           </div>
                           <div class="carousel-item">
@@ -94,9 +94,9 @@
                         <div class="card-body">
                             <h1>Your Courses</h1>
                             {% if profile.classes.all %}
-                            <ul>
+                            <ul class="list-group">
                                 {% for name in profile.classes.all %}
-                                <li><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a></li>
+                                <a href="{% url 'expand_class' course_id=name.id %}" class="list-group-item" >{{ name.subject }} {{name.catalog_nbr}}</a>
                                 {% endfor %}
                             </ul>
                             {% else %}
@@ -219,9 +219,11 @@
                             <div class="card-body">
                             <h1>Your Courses</h1>
                             {% if profile.classes.all %}
-                            <ul>
+                            <ul class="list-group">
                             {% for name in profile.classes.all %}
-                            <li><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a></li>
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a>
+                            <span class="badge badge-primary badge-pill">{{name.tutors.count}}</span>
+                          </li>
                             {% endfor %}
                             </ul>
                             {% else %}

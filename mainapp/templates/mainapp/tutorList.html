@@ -3,21 +3,32 @@
 {% load socialaccount %}
 {% block content %}
 <h1>Tutor List</h1>
+<div class="input-group">
 <form action="{% url 'tutorSearch' %}" method="get">
-    <input name="q" type="text" placeholder="Search...">
+    <div class="form-group">
+    <div class="form-outline">
+        <input type="search" name="q" class="form-control" placeholder="Search..." />
+      </div>
+    </div>
 </form>
+</div>
 {% if messages %}
     {% for message in messages %}
-    <li>{{message}}</li>
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
     {% endfor %}
 {% endif %}
 <form action="{% url 'add-tutor' %}" method="POST">
+    <div class="form-group">
     {% csrf_token %}
     {% for tutor in tutors %}
-        <input name="tutor" type="checkbox" value="{{tutor.id}}" href=""><a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
+        <input name="tutor" type="radio" class="form-check-input" value="{{tutor.id}}" href=""><a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
     {% endfor %}
     <br>
     {{form.as_p}}
-    <button type="submit">Request Selected Tutors</button>
+    <button type="submit" class="btn btn-primary">Request Selected Tutors</button>
+    </div>
 </form>
+</div>
 {% endblock %}
