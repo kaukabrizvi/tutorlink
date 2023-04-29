@@ -48,7 +48,7 @@ From {{tutor.avail_start}} To {{tutor.avail_end}}
     <div class="form-group">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit" class="btn btn-primary" name="tutor" value="{{tutor.id}}">Request Selected Tutor</button>
+    <button type="submit" class="btn btn-info" name="tutor" value="{{tutor.id}}">Request Selected Tutor</button>
     </div>
 </form>
 

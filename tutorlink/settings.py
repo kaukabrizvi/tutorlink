@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'requests',
     'bootstrap5',
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +172,8 @@ SESSION_COOKIE_SECURE = True
 SOCIALACCOUNT_LOGIN_ON_GET=True
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 BOOTSTRAP5 = {
 
     # The complete URL to the Bootstrap CSS file

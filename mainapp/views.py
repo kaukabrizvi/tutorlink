@@ -192,7 +192,6 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 return redirect("index")
             else:  
                 messages.warning(request, "Cannot request tutor when they aren't available.")
-                print("HERE")
                 return HttpResponseRedirect(reverse("tutorSearch"))
                 
 def accept_student_to_profile(request): 

@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-
+from crispy_forms.bootstrap import InlineCheckboxes
+from crispy_forms.layout import Layout
 from .models import TutorSesh
 
 
@@ -9,7 +10,6 @@ class DateInput(forms.DateInput):
 
 class TimeInput(forms.TimeInput):
     input_type = 'time'
-
 
 class TutorSeshForm(ModelForm):
     class Meta:
@@ -27,7 +27,7 @@ class ClassSearchForm(forms.Form):
     descr = forms.CharField(label='Class Name', max_length=100, required=False, widget=forms.TextInput(attrs={'placeholder': 'e.g. Advanced Software'}))
 
 class UpdateTheTutorProfileForm(forms.Form):
-    username = forms.CharField(label="Username",widget=forms.Textarea)
+    username = forms.CharField(label="Username",widget=forms.Textarea(attrs={'cols': 20, 'rows': 1}))
     monday = forms.BooleanField(label= "Monday", required=False)
     tuesday = forms.BooleanField(label ="Tuesday",required=False)
     wednesday = forms.BooleanField(label = "Wednesday", required=False)
@@ -42,5 +42,5 @@ class UpdateTheTutorProfileForm(forms.Form):
 
 
 class UpdateTheStudentProfileForm(forms.Form):
-    username = forms.CharField(label="Username",widget=forms.Textarea)
+    username = forms.CharField(label="Username",widget=forms.Textarea(attrs={'cols': 20, 'rows': 1}))
     phone_number = forms.CharField(label="Phone Number",max_length=12,required=False,)
