@@ -4,7 +4,8 @@
 
 <h3>{{tutor.user.username}}</h3>
 Email : {{tutor.user.email}}<br>
-Phone Number : {{tutor.phone_number}}
+Phone Number : {{tutor.phone_number}}<br>
+Hourly Rate : {{tutor.hourly_rate}}
 <h4>Classes</h4>
     {% for class in tutor.classes.all %}
     <li>{{class.subject}} {{class.catalog_nbr}}</li>
@@ -33,5 +34,22 @@ Phone Number : {{tutor.phone_number}}
     {% endif %}
 <h3>Times Availible</h3>
 From {{tutor.avail_start}} To {{tutor.avail_end}}
+
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+    {% endfor %}
+{% endif %}
+<h2>Schedule a Session</h2>
+<form action="{% url 'add-from-their-profile' %}" method="POST">
+    <div class="form-group">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-primary" name="tutor" value="{{tutor.id}}">Request Selected Tutor</button>
+    </div>
+</form>
 
 {% endblock %}

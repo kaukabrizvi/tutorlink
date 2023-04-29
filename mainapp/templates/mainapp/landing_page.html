@@ -92,16 +92,17 @@
                       </div>
                       <div class="card">
                         <div class="card-body">
-                            <h1>Your Courses</h1>
-                            {% if profile.classes.all %}
-                            <ul class="list-group">
-                                {% for name in profile.classes.all %}
-                                <a href="{% url 'expand_class' course_id=name.id %}" class="list-group-item" >{{ name.subject }} {{name.catalog_nbr}}</a>
-                                {% endfor %}
-                            </ul>
-                            {% else %}
-                            <p>No classes yet!</p>
-                            {% endif %}
+                        <h1>Your Courses</h1>
+                        {% if profile.classes.all %}
+                        <ul class="list-group">
+                        {% for name in profile.classes.all %}
+                        <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a>
+                      </li>
+                        {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>No classes yet!</p>
+                        {% endif %}
                             <a href="search_classes" class="btn btn-info" role="button">Add Classes</a>
                             
                         </div>

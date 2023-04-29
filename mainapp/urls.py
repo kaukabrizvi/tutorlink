@@ -49,6 +49,7 @@ urlpatterns = [
     path('student/editProfile', views.StudentProfileEditView.as_view(), name='edit_profile_student'),
     path('student/savechanges/', views.StudentProfileEdit, name='make-changes-student'),
     path('student/tutorProfile/<int:tutor_id>', views.getTutorProfile, name='tutor-profile'),
+    path('student/tutorProfile/add', views.add_tutor_to_profile_from_profile, name='add-from-their-profile'),
     
    #path('student/tutorReview',)
     #path('mySchedule', name ="mySchedule")

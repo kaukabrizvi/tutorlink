@@ -106,7 +106,7 @@ def add_class_to_profile(request):
             # Add the user to the class's list of tutors
             class_obj.tutors.add(request.user)
             
-        return redirect('myCourses')
+        return redirect('index')
     
     return render(request, 'mainApp/classinfo.html', {'course': course})
 def expand_class(request, course_id):
@@ -192,6 +192,7 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 return redirect("index")
             else:  
                 messages.warning(request, "Cannot request tutor when they aren't available.")
+                print("HERE")
                 return HttpResponseRedirect(reverse("tutorSearch"))
                 
 def accept_student_to_profile(request): 
@@ -388,4 +389,38 @@ def submit_review(request, tutor_id):
 
 def getTutorProfile(request,tutor_id):
     tutor = Profile.objects.get(id=tutor_id)
-    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor})
+    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm})
+
+
+def add_tutor_to_profile_from_profile(request):
+        theUser = Profile.objects.get(user=request.user)
+        if "tutor" in request.POST:
+            theTutor = Profile.objects.get(user=request.POST["tutor"])
+            theDate = datetime.datetime.strptime(request.POST["date"],"%Y-%m-%d")
+            theTime = datetime.datetime.strptime(request.POST["time"],"%H:%M").time()
+            dates = { #use this to do the comparison dynamically for day of the week
+                0 : theTutor.monday,
+                1 : theTutor.tuesday,
+                2 : theTutor.wednesday,
+                3 : theTutor.thursday,
+                4 : theTutor.friday,
+                5 : theTutor.saturday,
+                6 : theTutor.sunday,
+            }
+            if theDate > datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end):
+                theSesh = TutorSesh.objects.create(
+                    tutor=theTutor.user,
+                    student = theUser.user,
+                    date = request.POST["date"],
+                    time = request.POST["time"],)
+                theSesh.save()
+                theUser.connected_list.add(theTutor.user)
+                theUser.schedule_list.add(theSesh)
+                theUser.save()
+                theTutor.connected_list.add(theUser.user)
+                theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
+                theTutor.save()
+                return redirect("index")
+            else:
+                messages.warning(request, "Cannot request tutor when they aren't available.")
+                return HttpResponseRedirect(reverse('tutor-profile',kwargs={'tutor_id' : request.POST["tutor"]}))
