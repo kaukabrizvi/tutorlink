@@ -19,10 +19,14 @@
     {% if can_add_class %}
         <form method="POST" action="{% url 'add-class' %}">
             {% csrf_token %}
-            <button class="btn btn-primary btn-md mr-3" type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Add This Class to Your Profile</button>
+            <button class="btn btn-info" type="submit" name="add_class" value="{{subject}} {{catalog_nbr}}">Add This Class to Your Profile</button>
         </form>
     {% else %}
         <p>This class is already in your profile.</p>
+        <form method="POST" action="{% url 'remove_class' %}">
+            {% csrf_token %}
+            <button class="btn btn-info" type="submit" name="remove_class" value="{{subject}} {{catalog_nbr}}">Remove This Class From Your Profile</button>
+        </form>
     {% endif %}
     </div>
 </div>

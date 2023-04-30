@@ -109,6 +109,21 @@ def add_class_to_profile(request):
         return redirect('index')
     
     return render(request, 'mainApp/classinfo.html', {'course': course})
+
+def remove_class_from_profile(request):
+    if request.method == 'POST':
+        print(request.POST)
+        class_val = request.POST["remove_class"]  # Updated line
+        subject, catalog_nbr = class_val.split(" ")
+        class_obj = Class.objects.get(subject=subject, catalog_nbr=catalog_nbr)
+        profile = request.user.profile
+        profile.classes.remove(class_obj)
+        if request.user.profile.is_tutor:
+            class_obj.tutors.remove(request.user)
+
+        return redirect('index')
+    return render(request, 'mainapp/classinfo.html', {'course': course})
+
 def expand_class(request, course_id):
     course = get_object_or_404(Class, id=course_id)
     user = request.user
