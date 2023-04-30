@@ -240,8 +240,8 @@
                             {% if profile.accepted_list.all %}
                             {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
-                            {% if sesh.student == accept %}
-                            <li>{{accept}} on {{sesh.date}} at {{sesh.time}}</li>
+                            {% if sesh.tutor == accept %}
+                            <li><a href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a></li>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}

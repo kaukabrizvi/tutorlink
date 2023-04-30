@@ -141,7 +141,7 @@ class SearchResultsView(ListView):
         if query != None:
             found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query).filter(classes__in=theUser.classes.all())
         else:
-            found_tutors = None
+           found_tutors = None
         return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
 
 def viewMyCourses(request):
@@ -423,3 +423,25 @@ def add_tutor_to_profile_from_profile(request):
             else:
                 messages.warning(request, "Cannot request tutor when they aren't available.")
                 return HttpResponseRedirect(reverse('tutor-profile',kwargs={'tutor_id' : request.POST["tutor"]}))
+
+
+def review_page(request, sesh_id):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "sesh" : TutorSesh.objects.get(id=sesh_id),
+        "tutor": TutorSesh.objects.get(id=sesh_id).tutor
+    }
+    return render(request, "mainapp/review.html", context)
+
+
+def update_rating(request):
+    theTutor = Profile.objects.get(user=requests.POST["tutor"])
+    theUser = Profile.objects.get(user=requests.user)
+    theSesh = TutorSesh.objects.get(id=requests.POST["sesh"])
+
+    the_rating = int(requests.POST["rating"])
+
+    theTutor.review_count += 1
+    theTutor.rating = (theTutor.rating + the_rating) / theTutor.review_count
+
+    theTutor.save()
