@@ -51,6 +51,7 @@ urlpatterns = [
     path('student/tutorProfile/<int:tutor_id>', views.getTutorProfile, name='tutor-profile'),
     path('student/tutorProfile/add', views.add_tutor_to_profile_from_profile, name='add-from-their-profile'),
     path('student/review/<int:sesh_id>', views.review_page, name='review'),
+    path('student/review/updaterating', views.update_rating, name='update_rating'),
     
    #path('student/tutorReview',)
     #path('mySchedule', name ="mySchedule")

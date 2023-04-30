@@ -50,7 +50,7 @@ class Profile(models.Model):
         avail_end = models.TimeField(default=datetime.time(23,59,59))
 
         review_count = models.IntegerField(default=0)
-        rating = models.DecimalField(default=1, decimal_places=2, max_digits=3)
+        rating = models.DecimalField(default=0, decimal_places=2, max_digits=3)
 
         def __str__(self):
                 return str(self.user)

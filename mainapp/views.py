@@ -435,13 +435,17 @@ def review_page(request, sesh_id):
 
 
 def update_rating(request):
-    theTutor = Profile.objects.get(user=requests.POST["tutor"])
-    theUser = Profile.objects.get(user=requests.user)
-    theSesh = TutorSesh.objects.get(id=requests.POST["sesh"])
+    print(request.POST)
+    theTutor = Profile.objects.get(user=request.POST["tutor"])
+    theUser = Profile.objects.get(user=request.user)
+    theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
 
-    the_rating = int(requests.POST["rating"])
+    the_rating = int(request.POST["rating"])
 
     theTutor.review_count += 1
     theTutor.rating = (theTutor.rating + the_rating) / theTutor.review_count
 
     theTutor.save()
+    theSesh.has_rated = True
+    theSesh.save()
+    return redirect('index')
