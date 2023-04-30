@@ -20,7 +20,6 @@
 {% block content %}
     {% if user.is_authenticated %}
         {% for profile in Profiles %}
-        <br></br>
             {% if profile.user.email|stringformat:"s" == user.email|stringformat:"s" %}
                 {% if profile.is_tutor %}
                     
@@ -96,8 +95,9 @@
                         {% if profile.classes.all %}
                         <ul class="list-group">
                         {% for name in profile.classes.all %}
-                        <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a>
-                      </li>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}
+                          <span class="badge badge-primary badge-pill">{{name.tutors.count}}</span>
+                        </a>
                         {% endfor %}
                         </ul>
                         {% else %}
@@ -222,9 +222,9 @@
                             {% if profile.classes.all %}
                             <ul class="list-group">
                             {% for name in profile.classes.all %}
-                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><a href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}</a>
+                            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}
                             <span class="badge badge-primary badge-pill">{{name.tutors.count}}</span>
-                          </li>
+                            </a>
                             {% endfor %}
                             </ul>
                             {% else %}
@@ -238,13 +238,15 @@
                             <div class="card-body">    
                             <h1>Upcoming Tutoring Sessions</h1>
                             {% if profile.accepted_list.all %}
+                            <ul class="list-group">
                             {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.tutor == accept %}
-                            <li><a href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a></li>
+                            <a class="list-group-item list-group-item-action" href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
+                            </ul>
                             {% else %}
                             <p>You have no scheduled sessions</p>
                             {% endif %}
