@@ -19,17 +19,7 @@
       </div>
     {% endfor %}
 {% endif %}
-<form action="{% url 'add-tutor' %}" method="POST">
-    <div class="form-group">
-    {% csrf_token %}
     {% for tutor in tutors %}
-        <input name="tutor" type="radio" class="form-check-input" value="{{tutor.id}}" href=""><a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
+        <a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
     {% endfor %}
-    <br>
-    <br>
-    {{form.as_p}}
-    <button type="submit" class="btn btn-info">Request Selected Tutors</button>
-    </div>
-</form>
-</div>
 {% endblock %}
