@@ -111,12 +111,10 @@
                             <h1>Upcoming Tutoring Sessions</h1>
                             {% if profile.accepted_list.all %}
                             <ul class="list-group">
-                            {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
-                            {% if sesh.student == accept %}
-                            <li class="list-group-item d-flex">{{accept}} on {{sesh.date}} at {{sesh.time}}</li>
+                            {% if sesh.accepted %}
+                            <li class="list-group-item d-flex">{{sesh.student}} on {{sesh.date}} at {{sesh.time}}</li>
                             {% endif %}
-                            {% endfor %}
                             {% endfor %}
                             </ul>
                             {% else %}
@@ -133,7 +131,7 @@
                                 {% csrf_token %}
                                 {% for student in profile.connected_list.all %}
                                 {% for sesh in profile.schedule_list.all %}
-                                {% if sesh.student == student %}
+                                {% if not sesh.accepted %}
                                     <label class="btn btn-primary">
                                       <input name="sesh" type="checkbox" autocomplete="off" value="{{sesh.id}}"> {{student}} on {{sesh.date}} at {{sesh.time}}
                                     </label>
@@ -261,8 +259,8 @@
                             {% if profile.connected_list.all %}
                             {% for tutor in profile.connected_list.all %}
                             {% for sesh in profile.schedule_list.all %}
-                            {% if sesh.tutor == tutor %}
-                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">{{tutor}} on {{sesh.date}} at {{sesh.time}}</li>
+                            {% if not sesh.accepted %}
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">{{sesh.tutor}} on {{sesh.date}} at {{sesh.time}}</li>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}

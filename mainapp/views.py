@@ -213,28 +213,29 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 
 def accept_student_to_profile(request): 
         print(request.POST)
-        theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
-        theUser = Profile.objects.get(user=theSesh.tutor)
-        theStudent = Profile.objects.get(user=theSesh.student)
-        #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
-        if request.method == "POST" and "accept" in request.POST:
-            theUser.accepted_list.add(theStudent.user)
-            theUser.connected_list.remove(theStudent.user)
-            theUser.save()
-            theStudent.accepted_list.add(theUser.user)
-            theStudent.connected_list.remove(theUser.user)  
-            theUser.schedule_list.add(theSesh)
-            theStudent.save()
-            theSesh.accepted = True
-            theSesh.save()
-            return redirect("index")
-        else:
-            theUser.connected_list.remove(theStudent.user)
-            theUser.save()
-            theStudent.connected_list.remove(theUser.user)
-            theStudent.save()
-            theSesh.delete()
-            return redirect("index")
+        for sesh in request.POST.getlist('sesh'):
+            print(sesh)
+            theSesh = TutorSesh.objects.get(id=int(sesh))
+            theUser = Profile.objects.get(user=theSesh.tutor)
+            theStudent = Profile.objects.get(user=theSesh.student)
+            #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
+            if request.method == "POST" and "accept" in request.POST:
+                theUser.accepted_list.add(theStudent.user)
+                theUser.connected_list.remove(theStudent.user)
+                theUser.save()
+                theStudent.accepted_list.add(theUser.user)
+                theStudent.connected_list.remove(theUser.user)  
+                theUser.schedule_list.add(theSesh)
+                theStudent.save()
+                theSesh.accepted = True
+                theSesh.save()
+            else:
+                theUser.connected_list.remove(theStudent.user)
+                theUser.save()
+                theStudent.connected_list.remove(theUser.user)
+                theStudent.save()
+                theSesh.delete()
+        return redirect("index")
 
 def myTutorList(request):
     user = Profile.objects.get(user=request.user)
