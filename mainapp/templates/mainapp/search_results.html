@@ -1,17 +1,17 @@
 {% extends 'mainapp/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
     <h1>Search Classes</h1>
     <form method="GET" action="{% url 'search_classes' %}">
-        {{ form.as_p }}
-        <button type="submit">Search</button>
+        {{ form|crispy }}
+        <button class="btn btn-info" type="submit">Search</button>
     </form>
     {% if classes %}
         <hr>
         <h1>Search Results</h1>
-        <ul>
+        <ul class="list-group">
             {% for c in classes %}
-                <li><a href="{% url 'expand_class' course_id=c.id %}">{{ c.subject }} {{ c.catalog_nbr }} - {{ c.descr }}</a></li>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"" href="{% url 'expand_class' course_id=c.id %}">{{ c.subject }} {{ c.catalog_nbr }} - {{ c.descr }}</a>
             {% endfor %}
         </ul>
     {% endif %}

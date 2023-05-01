@@ -3,27 +3,16 @@
 {% load socialaccount %}
 {% block content %}
 <html>
-<body>
-<h1>Tutor Login </h1>
-{% if user.is_authenticated %}
-  <p>Welcome, You are logged in as {{ user.username }}</p>
-{% else %}
-  <a href= "index" >Go to Login</a>
-{% endif %}
-</body>
-<a href="search_classes">View all Classes</a>
-<a href="{% url 'myCourses' %}">My Classes</a>
-<a href="{% url 'myStudents' %}">My Students</a>
-<div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
-  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-      <img src="{% static "images/user.png" %}" width="30" height="30" alt="Dropdown Image">
-  </a>
-
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" href="{% url 'edit_profile_tutor' %}">Edit Profile</a></li>
-    <li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
-    <li><a class="dropdown-item" href="accounts/logout/">Logout</a>
-  </ul>
-</div>
+  <body>
+    <h1>Tutor Login </h1>
+    {% if user.is_authenticated %}
+      <p>Welcome, You are logged in as {{ user.username }}</p>
+    {% else %}
+      <a href= "index" >Go to Login</a>
+    {% endif %}
+  </body>
+  <a href="search_classes">View all Classes</a>
+  <a href="{% url 'myCourses' %}">My Classes</a>
+  <a href="{% url 'myStudents' %}">My Students</a>
 </html>
 {% endblock %}

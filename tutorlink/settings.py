@@ -47,10 +47,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'requests',
     'bootstrap5',
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -89,6 +93,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+#DATABASE_URL = "postgres://fwuuryehnbkanc:0639600b1039ce326aba914a7eb8a3625abe0b36cecb12d60811a1139d360bfc@ec2-3-211-6-217.compute-1.amazonaws.com:5432/d1b5eipc80rfld"
 db_from_env= dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
@@ -117,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -161,9 +168,12 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 SITE_ID = 2
-
+SESSION_COOKIE_SECURE = True
+SOCIALACCOUNT_LOGIN_ON_GET=True
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 BOOTSTRAP5 = {
 
     # The complete URL to the Bootstrap CSS file
@@ -217,5 +227,11 @@ BOOTSTRAP5 = {
     'field_renderers': {
         'default': 'bootstrap5.renderers.FieldRenderer',
         'inline': 'bootstrap5.renderers.InlineFieldRenderer',
+    },
+}
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }

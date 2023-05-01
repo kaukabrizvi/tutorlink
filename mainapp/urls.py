@@ -35,6 +35,7 @@ urlpatterns = [
     path('student/allTutors', views.getAllTutors, name="tutorList"),
     path('student/allTutors/results', SearchResultsView.as_view(), name='tutorSearch'),
     path('classadded', views.add_class_to_profile, name="add-class"),
+    path('remove_class/', views.remove_class_from_profile, name='remove_class'),
     path('myCourses', views.viewMyCourses, name="myCourses"),
     path('myProfile', views.myProfile,name="profile"),
     path('student/allTutors/results/addTutor', views.add_tutor_to_profile, name="add-tutor"),
@@ -49,6 +50,10 @@ urlpatterns = [
     path('student/editProfile', views.StudentProfileEditView.as_view(), name='edit_profile_student'),
     path('student/savechanges/', views.StudentProfileEdit, name='make-changes-student'),
     path('student/tutorProfile/<int:tutor_id>', views.getTutorProfile, name='tutor-profile'),
+    path('student/tutorProfile/add', views.add_tutor_to_profile_from_profile, name='add-from-their-profile'),
+    path('student/review/<int:sesh_id>', views.review_page, name='review'),
+    path('student/review/updaterating', views.update_rating, name='update_rating'),
+    
    #path('student/tutorReview',)
     #path('mySchedule', name ="mySchedule")
 ]

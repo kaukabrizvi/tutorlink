@@ -3,17 +3,26 @@
 {% load socialaccount %}
 {% block content %}
 <h1>Tutor List</h1>
+<div class="input-group">
 <form action="{% url 'tutorSearch' %}" method="get">
-    <input name="q" type="text" placeholder="Search...">
+    <div class="form-group">
+    <div class="form-outline">
+        <input type="search" name="q" class="form-control" placeholder="Search..." />
+      </div>
+    </div>
 </form>
-
-<form action="{% url 'add-tutor' %}" method="POST">
-    {% csrf_token %}
-    {% for tutor in tutors %}
-        <input name="tutor" type="checkbox" value="{{tutor.id}}" href=""><a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
+</div>
+<ul class="list-group">
+    {% for tutor in Tutors %}
+        <a class="list-group-item list-group-item-action d-flex justify-content-between" href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}
+        <span class="badge badge-primary badge-pill">Rating : {{tutor.rating}}</span>
+        </a>
     {% endfor %}
-    <br>
-    {{form.as_p}}
-    <button type="submit">Request Selected Tutors</button>
-</form>
+    <ul class="list-group">
+    {% for tutor in tutors %}
+        <a class="list-group-item list-group-item-action d-flex justify-content-between" href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}
+        <span class="badge badge-primary badge-pill">Rating : {{tutor.rating}}</span>
+        </a>
+    {% endfor %}
+    </input>
 {% endblock %}

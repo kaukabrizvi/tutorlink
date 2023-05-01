@@ -2,14 +2,19 @@
 {% load static %}
 {% load bootstrap5 %}
 
+{% include 'mainapp/base.html' %}
+{% block content %}
+
 <div class="container mt-5">
     <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <h1 class="text-center">Welcome to TutorLink</h1>
-        <div class="text-center mt-4">
-          <a href="{% url 'student' %}" class="btn btn-primary btn-lg mr-3">Student Login</a>
-          <a href="{% url 'tutor' %}" class="btn btn-success btn-lg">Tutor Login</a>
+        <div class="col-md-6 offset-md-3">
+          <h1 class="text-center">Welcome to TutorLink</h1>
+          <div class="text-center mt-4">
+            <a href="{% url 'student' %}" class="btn btn-primary btn-lg mr-3">Student Login</a>
+            <a href="{% url 'tutor' %}" class="btn btn-success btn-lg">Tutor Login</a>
+          </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
+
+{% endblock %}

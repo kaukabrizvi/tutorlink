@@ -1,0 +1,54 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
+	.bg-amber {
+	  background-color: #ffc107;
+	}
+	.dropdown-menu {
+    background-color: #57A0D2;
+	}
+	.dropdown-toggle {
+    background-color: #4682B4;
+	}
+	.dropdown-toggle:hover,
+	.dropdown-toggle:focus {
+    background-color: #57A0D2;
+	}
+  </style>
+<nav class="navbar navbar-expand-sm navbar-dark bg-amber">
+	<div class="container">
+		<a href="{% url 'index' %}" class="navbar-brand mb-0 h1">
+			<img src="{% static 'images/TEMP.png' %}" width="30" height = "30"
+			class="d-inline-block align-top" alt="" style="margin-right: 3px;">
+			TutorMe
+		</a>
+		<ul class="nav navbar-nav ml-auto">
+			{% if user.is_authenticated %}
+        		
+			<div class="dropdown" style="position: relative; display: inline-block;">
+	            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+	                <img src="{% static 'images/user.png' %}" width="30" height="30" alt="Dropdown Image">
+	            </a>
+	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					{% for profile in Profiles %}
+            		{% if profile.user.email|stringformat:"s" == user.email|stringformat:"s" %}
+                		{% if profile.is_tutor %}
+	            		<li><a class="dropdown-item" href="{% url 'edit_profile_tutor' %}">Edit Profile</a></li>
+						{% else %}
+						<li><a class="dropdown-item" href="{% url 'edit_profile_student' %}">Edit Profile</a></li>
+						{% endif %}
+						{% endif %}
+						{% endfor %}
+	            		<li><a class="dropdown-item" href="changerole/">Remove Role</a></li>
+	              		<li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+	            	</ul>
+          		</div>
+			{% endif %}
+		</ul>
+	</div>
+</nav>

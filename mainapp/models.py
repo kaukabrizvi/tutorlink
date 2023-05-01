@@ -12,6 +12,12 @@ class TutorSesh(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "student_scheduled")
     date = models.DateField()
     time = models.TimeField()
+    has_rated = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+
+    def is_upcoming(self):
+        sesh_datetime = datetime.datetime.combine(self.date, self.time)
+        return sesh_datetime > datetime.datetime.now()
 class Class(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=50)
@@ -23,7 +29,7 @@ class Class(models.Model):
     #    return f"{self.subject} {self.catalog_nbr} - {self.descr}"
 
     def __str__(self):
-        return self.id  # acts as your post_id
+        return str(self.subject) + " " + str(self.catalog_nbr)  # acts as your post_id
 
 class Profile(models.Model):
         REQUIRED_FIELDS = ('user',)
@@ -47,6 +53,9 @@ class Profile(models.Model):
 
         avail_start = models.TimeField(default=datetime.time(0,0,0))
         avail_end = models.TimeField(default=datetime.time(23,59,59))
+
+        review_count = models.IntegerField(default=0)
+        rating = models.DecimalField(default=0, decimal_places=2, max_digits=3)
 
         def __str__(self):
                 return str(self.user)

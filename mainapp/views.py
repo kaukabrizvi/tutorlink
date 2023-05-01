@@ -13,8 +13,11 @@ from django.db.models import Q
 from .forms import ClassSearchForm
 from django.contrib.auth.decorators import login_required
 from .models import Tutor, Review
-
+import datetime
+from django.contrib import messages
+from django.utils.timezone import localtime, now
 import requests
+import operator
 
 # Create your views here.
 
@@ -30,11 +33,11 @@ def index(request):
 def assignUserType(request):
     if "tutorbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_tutor=True)
-        return redirect('tutor')
+        return redirect('index')
     
     if "studentbtn" in request.POST:
         Profile.objects.filter(user=request.user).update(is_student=True)
-        return redirect('student')
+        return redirect('index')
     
 def changeRole(request):
     Profile.objects.filter(user=request.user).update(is_tutor=False)
@@ -104,9 +107,24 @@ def add_class_to_profile(request):
             # Add the user to the class's list of tutors
             class_obj.tutors.add(request.user)
             
-        return redirect('myCourses')
+        return redirect('index')
     
     return render(request, 'mainApp/classinfo.html', {'course': course})
+
+def remove_class_from_profile(request):
+    if request.method == 'POST':
+        print(request.POST)
+        class_val = request.POST["remove_class"]  # Updated line
+        subject, catalog_nbr = class_val.split(" ")
+        class_obj = Class.objects.get(subject=subject, catalog_nbr=catalog_nbr)
+        profile = request.user.profile
+        profile.classes.remove(class_obj)
+        if request.user.profile.is_tutor:
+            class_obj.tutors.remove(request.user)
+
+        return redirect('index')
+    return render(request, 'mainapp/classinfo.html', {'course': course})
+
 def expand_class(request, course_id):
     course = get_object_or_404(Class, id=course_id)
     user = request.user
@@ -120,7 +138,8 @@ def expand_class(request, course_id):
         'tutors': tutors
     })
 def getAllTutors(request):
-    tutors = Profile.objects.filter(is_tutor = False)
+    theUser = Profile.objects.get(user=request.user)
+    tutors = Profile.objects.filter(is_tutor = True).filter(classes__in=theUser.classes.all())
     context = {
         "Tutors" : tutors
     }
@@ -134,8 +153,13 @@ class SearchResultsView(ListView):
     def get(self,request):
         form = self.form_class()
         query = self.request.GET.get("q")
-        found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query)
-        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
+        print(request.user)
+        theUser = Profile.objects.get(user=request.user)
+        if query != None:
+            found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query).filter(classes__in=theUser.classes.all())
+        else:
+           found_tutors = None
+        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors.order_by('-rating')})
 
 def viewMyCourses(request):
     profile = request.user.profile
@@ -158,35 +182,56 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
         theUser = Profile.objects.get(user=request.user)
         if "tutor" in request.POST:
             theTutor = Profile.objects.get(user=request.POST["tutor"])
-            theSesh = TutorSesh.objects.create(
-                tutor=theTutor.user,
-                student = theUser.user,
-                date = request.POST["date"],
-                time = request.POST["time"],)
-            theSesh.save()
-            theUser.connected_list.add(theTutor.user)
-            theUser.schedule_list.add(theSesh)
-            theUser.save()
-            theTutor.connected_list.add(theUser.user)
-            theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
-            theTutor.save()
-            return redirect("student")
-        else:
-            return myProfile(request)
+            theDate = datetime.datetime.strptime(request.POST["date"],"%Y-%m-%d")
+            theTime = datetime.datetime.strptime(request.POST["time"],"%H:%M").time()
+            dates = { #use this to do the comparison dynamically for day of the week
+                0 : theTutor.monday,
+                1 : theTutor.tuesday,
+                2 : theTutor.wednesday,
+                3 : theTutor.thursday,
+                4 : theTutor.friday,
+                5 : theTutor.saturday,
+                6 : theTutor.sunday,
+            }
+            if theDate >= datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime:
+                theSesh = TutorSesh.objects.create(
+                    tutor=theTutor.user,
+                    student = theUser.user,
+                    date = request.POST["date"],
+                    time = request.POST["time"],)
+                theSesh.save()
+                theUser.connected_list.add(theTutor.user)
+                theUser.schedule_list.add(theSesh)
+                theUser.save()
+                theTutor.connected_list.add(theUser.user)
+                theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
+                theTutor.save()
+                return redirect("index")
+            else:  
+                messages.warning(request, "Cannot request tutor when they aren't available.")
+                return HttpResponseRedirect(reverse("tutorSearch"))
+                
 def accept_student_to_profile(request): 
-        theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
-        theUser = Profile.objects.get(user=theSesh.tutor)
-        theStudent = Profile.objects.get(user=theSesh.student)
-        #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
-        if request.method == "POST":
-            theUser.accepted_list.add(theStudent.user)
-            theUser.connected_list.remove(theStudent.user)
-            theUser.save()
-            theStudent.accepted_list.add(theUser.user)
-            theStudent.connected_list.remove(theUser.user)  
-            theUser.schedule_list.add(theSesh)
-            theStudent.save()
-            return redirect("tutor")
+        print(request.POST)
+        for sesh in request.POST.getlist('sesh'):
+            print(sesh)
+            theSesh = TutorSesh.objects.get(id=int(sesh))
+            theUser = Profile.objects.get(user=theSesh.tutor)
+            theStudent = Profile.objects.get(user=theSesh.student)
+            #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
+            if request.method == "POST" and "accept" in request.POST:
+                theUser.accepted_list.add(theStudent.user)
+                theUser.connected_list.remove(theStudent.user)
+                theUser.save()
+                theStudent.accepted_list.add(theUser.user)
+                theStudent.connected_list.remove(theUser.user)  
+                theUser.schedule_list.add(theSesh)
+                theStudent.save()
+                theSesh.accepted = True
+                theSesh.save()
+            else:
+                theSesh.delete()
+        return redirect("index")
 
 def myTutorList(request):
     user = Profile.objects.get(user=request.user)
@@ -244,11 +289,6 @@ def load_from_api(request):
 
 
 def search_classes(request):
-    if request.method != 'GET':
-        form = ClassSearchForm()
-
-        context = {'form': form}
-        return render(request, 'mainapp/search_classes.html', context)
     if request.method == 'GET':
         form = ClassSearchForm(request.GET)
         if form.is_valid():
@@ -268,6 +308,11 @@ def search_classes(request):
                 query &= Q(descr__icontains=descr)
 
             classes = Class.objects.filter(query)
+
+            if 'descr' in request.GET and request.GET['descr'] and not 'subject' in request.GET and not 'catalog_nbr' in request.GET:
+                url = f"/search_classes/?subject=&catalog_nbr=&descr={request.GET['descr']}"
+                return redirect(url)
+
             context = {
                 'classes': classes,
                 'form': form
@@ -280,7 +325,6 @@ def search_classes(request):
 
     context = {'form': form}
     return render(request, 'mainapp/search_classes.html', context)
-
 
 class TutorProfileEditView(ListView):
     model = Profile
@@ -324,7 +368,7 @@ def TutorProfileEdit(request):
     for day in days_list:
         setattr(theUser,day,False)
     theUser.save()
-    return redirect('tutor')
+    return redirect('index')
     
 
 class StudentProfileEditView(ListView):
@@ -351,7 +395,7 @@ def StudentProfileEdit(request):
         else:
             setattr(theUser,key,request.POST[key])
     theUser.save()
-    return redirect('student')
+    return redirect('index')
 
 @login_required
 def submit_review(request, tutor_id):
@@ -368,4 +412,69 @@ def submit_review(request, tutor_id):
 
 def getTutorProfile(request,tutor_id):
     tutor = Profile.objects.get(id=tutor_id)
-    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor})
+    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm})
+
+
+def add_tutor_to_profile_from_profile(request):
+        theUser = Profile.objects.get(user=request.user)
+        if "tutor" in request.POST:
+            theTutor = Profile.objects.get(user=request.POST["tutor"])
+            theDate = datetime.datetime.strptime(request.POST["date"],"%Y-%m-%d")
+            theTime = datetime.datetime.strptime(request.POST["time"],"%H:%M").time()
+            dates = { #use this to do the comparison dynamically for day of the week
+                0 : theTutor.monday,
+                1 : theTutor.tuesday,
+                2 : theTutor.wednesday,
+                3 : theTutor.thursday,
+                4 : theTutor.friday,
+                5 : theTutor.saturday,
+                6 : theTutor.sunday,
+            }
+
+            if theDate.date() >= datetime.datetime.now().date() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime().time():
+                theSesh = TutorSesh.objects.create(
+                    tutor=theTutor.user,
+                    student = theUser.user,
+                    date = request.POST["date"],
+                    time = request.POST["time"],)
+                theSesh.save()
+                theUser.connected_list.add(theTutor.user)
+                theUser.schedule_list.add(theSesh)
+                theUser.save()
+                theTutor.connected_list.add(theUser.user)
+                theTutor.schedule_list.add(theSesh) #need to use .all() to retrieve associated objects
+                theTutor.save()
+                return redirect("index")
+            else:
+                messages.warning(request, "Cannot request tutor when they aren't available.")
+                return HttpResponseRedirect(reverse('tutor-profile',kwargs={'tutor_id' : request.POST["tutor"]}))
+
+
+def review_page(request, sesh_id):
+    user = Profile.objects.get(user=request.user)
+    context = {
+        "sesh" : TutorSesh.objects.get(id=sesh_id),
+        "tutor": TutorSesh.objects.get(id=sesh_id).tutor,
+        "is_upcoming": TutorSesh.objects.get(id=sesh_id).is_upcoming()
+    }
+    return render(request, "mainapp/review.html", context)
+
+
+def update_rating(request):
+    theTutor = Profile.objects.get(user=request.POST["tutor"])
+    theUser = Profile.objects.get(user=request.user)
+    theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
+
+    the_rating = int(request.POST["rating"])
+
+    theTutor.review_count += 1
+    theTutor.rating = (theTutor.rating*(theTutor.review_count-1) + the_rating) / theTutor.review_count
+
+    theSesh.has_rated = True
+    theSesh.save()
+    theUser.schedule_list.remove(theSesh)
+    theTutor.schedule_list.remove(theSesh)
+    theTutor.save()
+    theUser.save()
+
+    return redirect('index')

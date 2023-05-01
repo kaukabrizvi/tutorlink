@@ -1,37 +1,192 @@
+<style type="text/css">
+  @media (min-width: 768px){
+  .seven-cols .col-md-1,
+  .seven-cols .col-sm-1,
+  .seven-cols .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .seven-cols .col-md-1,
+  .seven-cols .col-sm-1,
+  .seven-cols .col-lg-1 {
+    width: 14.285714285714285714285714285714%;
+    *width: 14.285714285714285714285714285714%;
+    max-width: 14.285714285714285714285714285714% !important;
+flex:none !important;
+  }
+}
+ 
+@media (min-width: 1200px) {
+  .seven-cols .col-md-1,
+  .seven-cols .col-sm-1,
+  .seven-cols .col-lg-1 {
+    width: 14.285714285714285714285714285714%;
+    *width: 14.285714285714285714285714285714%;
+    max-width: 14.285714285714285714285714285714% !important;
+flex:none !important;
+  }
+}
+</style>
 {% extends 'mainapp/base.html' %}
 {% load static %}
 {% block content %}
-
-<h3>{{tutor.user.username}}</h3>
-Email : {{tutor.user.email}}<br>
-Phone Number : {{tutor.phone_number}}
-<h4>Classes</h4>
-    {% for class in tutor.classes.all %}
-    <li>{{class.subject}} {{class.catalog_nbr}}</li>
-    {% endfor %}
-<h4>Availibility</h4>
-    {% if tutor.monday %}
-    <li>Monday</li>
-    {% endif %}
-    {% if tutor.tuesday %}
-    <li>Tuesday</li>
-    {% endif %}
-    {% if tutor.wednesday %}
-    <li>Wednesday</li>
-    {% endif %}
-    {% if tutor.thursday %}
-    <li>Thursday</li>
-    {% endif %}
-    {% if tutor.friday %}
-    <li>Friday</li>
-    {% endif %}
-    {% if tutor.saturday %}
-    <li>Saturday</li>
-    {% endif %}
-    {% if tutor.sunday %}
-    <li>Sunday</li>
-    {% endif %}
-<h3>Times Availible</h3>
-From {{tutor.avail_start}} To {{tutor.avail_end}}
-
+<section style="background-color: #eee;">
+    <div class="container py-5">
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img src="{% static 'images/profile.jpg' %}" alt="avatar"
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3">{{tutor.user.username}}</h5>
+              <p class="text-muted mb-1">Rating: {{tutor.rating}}</p>
+              </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tutor.user.username}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tutor.user.email}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tutor.phone_number}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Hourly Rate</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tutor.hourly_rate}}</p>
+                </div>
+              </div>
+              <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Classes:</p>
+                    {% for name in tutor.classes.all %}
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'expand_class' course_id=name.id %}">{{ name.subject }} {{name.catalog_nbr}}
+                      <span class="badge badge-primary badge-pill">{{name.tutors.count}}</span>
+                      </a>
+                {% endfor %}
+                
+                </div>
+            </div>
+                    <hr>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">Day</th>
+                          <th scope="col">Availability</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Monday</th>
+                          {% if tutor.monday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Tuesday</th>
+                          {% if tutor.tuesday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Wednesday</th>
+                          {% if tutor.wednesday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Thursday</th>
+                          {% if tutor.thursday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Friday</th>
+                          {% if tutor.friday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Saturday</th>
+                          {% if tutor.saturday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                        <tr>
+                          <th scope="row">Sunday</th>
+                          {% if tutor.sunday %}
+                          <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
+                          {% else %}
+                          <td>Unavailable</td>
+                          {% endif %}
+                        </tr>
+                      </tbody>
+                    </table>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush rounded-3">
+              <h2>Schedule a Session</h2>
+              {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{message}}
+                  </div>
+                {% endfor %}
+                {% endif %}
+                <form action="{% url 'add-from-their-profile' %}" method="POST">
+                  <div class="form-group">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="btn btn-info" name="tutor" value="{{tutor.id}}">Request Selected Tutor</button>
+                </div>
+              </form>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
