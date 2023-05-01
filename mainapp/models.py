@@ -13,6 +13,7 @@ class TutorSesh(models.Model):
     date = models.DateField()
     time = models.TimeField()
     has_rated = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
 
     def is_upcoming(self):
         sesh_datetime = datetime.datetime.combine(self.date, self.time)

@@ -225,6 +225,8 @@ def accept_student_to_profile(request):
             theStudent.connected_list.remove(theUser.user)  
             theUser.schedule_list.add(theSesh)
             theStudent.save()
+            theSesh.accepted = True
+            theSesh.save()
             return redirect("index")
         else:
             theUser.connected_list.remove(theStudent.user)
@@ -471,7 +473,11 @@ def update_rating(request):
     theTutor.review_count += 1
     theTutor.rating = (theTutor.rating*(theTutor.review_count-1) + the_rating) / theTutor.review_count
 
-    theTutor.save()
     theSesh.has_rated = True
     theSesh.save()
+    theUser.schedule_list.remove(theSesh)
+    theTutor.schedule_list.remove(theSesh)
+    theTutor.save()
+    theUser.save()
+
     return redirect('index')

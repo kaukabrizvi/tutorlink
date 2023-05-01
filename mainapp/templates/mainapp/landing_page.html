@@ -241,7 +241,7 @@
                             <ul class="list-group">
                             {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
-                            {% if sesh.tutor == accept %}
+                            {% if sesh.accepted %}
                             {% if not sesh.has_rated %}
                             <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a>
                             {% endif %}
