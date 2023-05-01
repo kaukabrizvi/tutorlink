@@ -138,7 +138,8 @@ def expand_class(request, course_id):
         'tutors': tutors
     })
 def getAllTutors(request):
-    tutors = Profile.objects.filter(is_tutor = False)
+    theUser = Profile.objects.get(user=request.user)
+    tutors = Profile.objects.filter(is_tutor = True).filter(classes__in=theUser.classes.all())
     context = {
         "Tutors" : tutors
     }
@@ -216,7 +217,7 @@ def accept_student_to_profile(request):
         theUser = Profile.objects.get(user=theSesh.tutor)
         theStudent = Profile.objects.get(user=theSesh.student)
         #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
-        if request.method == "POST":
+        if request.method == "POST" and "accept" in request.POST:
             theUser.accepted_list.add(theStudent.user)
             theUser.connected_list.remove(theStudent.user)
             theUser.save()
@@ -224,6 +225,13 @@ def accept_student_to_profile(request):
             theStudent.connected_list.remove(theUser.user)  
             theUser.schedule_list.add(theSesh)
             theStudent.save()
+            return redirect("index")
+        else:
+            theUser.connected_list.remove(theStudent.user)
+            theUser.save()
+            theStudent.connected_list.remove(theUser.user)
+            theStudent.save()
+            theSesh.delete()
             return redirect("index")
 
 def myTutorList(request):
