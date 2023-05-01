@@ -15,8 +15,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Tutor, Review
 import datetime
 from django.contrib import messages
-
+from django.utils.timezone import localtime, now
 import requests
+import operator
 
 # Create your views here.
 
@@ -157,7 +158,7 @@ class SearchResultsView(ListView):
             found_tutors = Profile.objects.filter(is_tutor=True).filter(user__username__contains=query).filter(classes__in=theUser.classes.all())
         else:
            found_tutors = None
-        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors})
+        return render(request,self.template_name,{'form' : form, 'tutors' : found_tutors.order_by('-rating')})
 
 def viewMyCourses(request):
     profile = request.user.profile
@@ -191,7 +192,7 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 5 : theTutor.saturday,
                 6 : theTutor.sunday,
             }
-            if theDate > datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end):
+            if theDate >= datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime:
                 theSesh = TutorSesh.objects.create(
                     tutor=theTutor.user,
                     student = theUser.user,
@@ -422,7 +423,8 @@ def add_tutor_to_profile_from_profile(request):
                 5 : theTutor.saturday,
                 6 : theTutor.sunday,
             }
-            if theDate > datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end):
+
+            if theDate.date() >= datetime.datetime.now().date() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime().time():
                 theSesh = TutorSesh.objects.create(
                     tutor=theTutor.user,
                     student = theUser.user,
@@ -452,7 +454,6 @@ def review_page(request, sesh_id):
 
 
 def update_rating(request):
-    print(request.POST)
     theTutor = Profile.objects.get(user=request.POST["tutor"])
     theUser = Profile.objects.get(user=request.user)
     theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
@@ -460,7 +461,7 @@ def update_rating(request):
     the_rating = int(request.POST["rating"])
 
     theTutor.review_count += 1
-    theTutor.rating = (theTutor.rating + the_rating) / theTutor.review_count
+    theTutor.rating = (theTutor.rating*(theTutor.review_count-1) + the_rating) / theTutor.review_count
 
     theTutor.save()
     theSesh.has_rated = True

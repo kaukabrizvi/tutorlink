@@ -117,7 +117,7 @@ flex:none !important;
                         </tr>
                         <tr>
                           <th scope="row">Tuesday</th>
-                          {% if tutor.Tuesday %}
+                          {% if tutor.tuesday %}
                           <td>{{tutor.avail_start}} to {{tutor.avail_end}}</td>
                           {% else %}
                           <td>Unavailable</td>
@@ -169,6 +169,13 @@ flex:none !important;
           <div class="card-body p-0">
             <ul class="list-group list-group-flush rounded-3">
               <h2>Schedule a Session</h2>
+              {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{message}}
+                  </div>
+                {% endfor %}
+                {% endif %}
                 <form action="{% url 'add-from-their-profile' %}" method="POST">
                   <div class="form-group">
                 {% csrf_token %}

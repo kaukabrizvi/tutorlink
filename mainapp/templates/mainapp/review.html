@@ -18,7 +18,7 @@
             </p>
 
             {% if not is_upcoming %}
-            <form method="post" action="{% url 'review' %}">
+            <form method="post" action="{% url 'update_rating' %}">
                 {% csrf_token %}
                 <input type="hidden" name="tutor" value="{{tutor.id}}">
                 <input type="hidden" name="sesh" value="{{sesh.id}}">
@@ -26,7 +26,7 @@
                     <label for="rating">Rating:</label>
                     <div class="star-rating">
                         <span class="text-muted mr-3">1</span>
-                        <input id="star-1" type="radio" name="rating" value="1">
+                        <input id="star-1" type="radio" name="rating" value="">
                         <label for="star-1" title="1 star">
                             <i class="active fa fa-star"></i>
                         </label>

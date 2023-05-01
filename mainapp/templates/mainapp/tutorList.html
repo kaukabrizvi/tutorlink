@@ -12,14 +12,11 @@
     </div>
 </form>
 </div>
-{% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-danger" role="alert">
-        {{message}}
-      </div>
-    {% endfor %}
-{% endif %}
+    <ul class="list-group">
     {% for tutor in tutors %}
-        <a href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}</a> Rate: {{tutor.hourly_rate}}</input>
+        <a class="list-group-item list-group-item-action d-flex justify-content-between" href= "{% url 'tutor-profile' tutor_id=tutor.id %}"  >{{tutor.user.username}}
+        <span class="badge badge-primary badge-pill">Rating : {{tutor.rating}}</span>
+        </a>
     {% endfor %}
+    </input>
 {% endblock %}
