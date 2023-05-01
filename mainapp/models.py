@@ -15,8 +15,8 @@ class TutorSesh(models.Model):
     has_rated = models.BooleanField(default=False)
 
     def is_upcoming(self):
-        sesh_datetime = datetime.combine(self.date, self.time)
-        return sesh_datetime > datetime.now()
+        sesh_datetime = datetime.datetime.combine(self.date, self.time)
+        return sesh_datetime > datetime.datetime.now()
 class Class(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=50)

@@ -110,13 +110,15 @@
                         <div class="card-body">
                             <h1>Upcoming Tutoring Sessions</h1>
                             {% if profile.accepted_list.all %}
+                            <ul class="list-group">
                             {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.student == accept %}
-                            <li>{{accept}} on {{sesh.date}} at {{sesh.time}}</li>
+                            <li class="list-group-item d-flex">{{accept}} on {{sesh.date}} at {{sesh.time}}</li>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
+                            </ul>
                             {% else %}
                             <p>You have no scheduled sessions</p>
                             {% endif %}
@@ -133,7 +135,7 @@
                                 {% for sesh in profile.schedule_list.all %}
                                 {% if sesh.student == student %}
                                     <label class="btn btn-primary">
-                                      <input type="checkbox" autocomplete="off" value="{{sesh.id}}"> {{student}} on {{sesh.date}} at {{sesh.time}}
+                                      <input name="sesh" type="checkbox" autocomplete="off" value="{{sesh.id}}"> {{student}} on {{sesh.date}} at {{sesh.time}}
                                     </label>
                                 {% endif %}
                                 {% endfor %}

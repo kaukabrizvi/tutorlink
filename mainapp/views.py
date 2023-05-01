@@ -210,6 +210,7 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
                 return HttpResponseRedirect(reverse("tutorSearch"))
                 
 def accept_student_to_profile(request): 
+        print(request.POST)
         theSesh = TutorSesh.objects.get(id=request.POST["sesh"])
         theUser = Profile.objects.get(user=theSesh.tutor)
         theStudent = Profile.objects.get(user=theSesh.student)
