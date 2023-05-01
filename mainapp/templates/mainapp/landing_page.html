@@ -133,10 +133,9 @@
                                 {% for student in profile.connected_list.all %}
                                 {% for sesh in profile.schedule_list.all %}
                                 {% if sesh.student == student %}
-                                <div>
-                                    <input name="sesh" type="checkbox" value="{{sesh.id}}">
-                                    <label>{{student}} {{sesh.date}} {{sesh.time}}</label>
-                                </div>
+                                    <label class="btn btn-primary">
+                                      <input type="checkbox" autocomplete="off" value="{{sesh.id}}"> {{student}} on {{sesh.date}} at {{sesh.time}}
+                                    </label>
                                 {% endif %}
                                 {% endfor %}
                                 {% endfor %}
@@ -242,7 +241,7 @@
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.tutor == accept %}
                             {% if not sesh.has_rated %}
-                            <a class="list-group-item list-group-item-action" href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a>
+                            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href = "{% url 'review' sesh_id=sesh.id %}">{{accept}} on {{sesh.date}} at {{sesh.time}} </a>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
@@ -261,7 +260,7 @@
                             {% for tutor in profile.connected_list.all %}
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.tutor == tutor %}
-                            <li>{{tutor}} on {{sesh.date}} at {{sesh.time}}</li>
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">{{tutor}} on {{sesh.date}} at {{sesh.time}}</li>
                             {% endif %}
                             {% endfor %}
                             {% endfor %}

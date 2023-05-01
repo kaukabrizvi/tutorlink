@@ -429,7 +429,8 @@ def review_page(request, sesh_id):
     user = Profile.objects.get(user=request.user)
     context = {
         "sesh" : TutorSesh.objects.get(id=sesh_id),
-        "tutor": TutorSesh.objects.get(id=sesh_id).tutor
+        "tutor": TutorSesh.objects.get(id=sesh_id).tutor,
+        "is_upcoming": TutorSesh.objects.get(id=sesh_id).is_upcoming()
     }
     return render(request, "mainapp/review.html", context)
 

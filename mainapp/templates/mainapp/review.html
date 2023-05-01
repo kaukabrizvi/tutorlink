@@ -1,6 +1,8 @@
-{% extends 'mainapp/base.html' %}
-{% load static %}
+{% extends 'base.html' %}
+
 {% block content %}
+
+{% load static %}
 
 <div class="container">
     <div class="row">
@@ -15,13 +17,8 @@
                 <span class="badge badge-primary badge-pill">{{sesh.date}} at {{sesh.time}}</span>
             </p>
 
-            <p class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                If your session has finished, rate {{tutor}} below:
-            </p>
-
-            <form class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                  method="POST"
-                  action="{% url 'update_rating' %}">
+            {% if not is_upcoming %}
+            <form method="post" action="{% url 'review' %}">
                 {% csrf_token %}
                 <input type="hidden" name="tutor" value="{{tutor.id}}">
                 <input type="hidden" name="sesh" value="{{sesh.id}}">
@@ -54,6 +51,9 @@
                 </div>
                 <button type="submit" class="btn btn-info">Submit</button>
             </form>
+            {% else %}
+            <p class="text-muted">This session is upcoming. Check back afterwards to submit a review!</p>
+            {% endif %}
         </div>
     </div>
 </div>
