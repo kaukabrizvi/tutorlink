@@ -230,10 +230,6 @@ def accept_student_to_profile(request):
                 theSesh.accepted = True
                 theSesh.save()
             else:
-                theUser.connected_list.remove(theStudent.user)
-                theUser.save()
-                theStudent.connected_list.remove(theUser.user)
-                theStudent.save()
                 theSesh.delete()
         return redirect("index")
 
