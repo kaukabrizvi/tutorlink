@@ -20,6 +20,17 @@ import requests
 import operator
 
 # Create your views here.
+"""
+Refrences:
+-----------------
+For the SearchResultsView
+Title: Djanog Search Tutorial
+Author: Will Vincent
+URL : learndjango.com/tutorials/django-search-tutorial
+------------------------------
+
+"""
+
 
 
 def index(request):
@@ -145,7 +156,11 @@ def getAllTutors(request):
     }
     return render(request,"mainapp/tutorList.html",context)
 
-#Got this from learndjango.com/tutorials/django-search-tutorial
+"""
+Title: Djanog Search Tutorial
+Author: Will Vincent
+URL : learndjango.com/tutorials/django-search-tutorial
+"""
 class SearchResultsView(ListView):
     model = Profile
     template_name = "mainapp/tutorList.html"
