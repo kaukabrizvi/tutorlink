@@ -108,7 +108,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h1>Upcoming Tutoring Sessions</h1>
-                            {% if profile.accepted_list.all %}
+                            {% if profile.schedule_list.all %}
                             <ul class="list-group">
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.accepted %}
@@ -238,7 +238,7 @@
                         <div class="card">
                             <div class="card-body">    
                             <h1>Upcoming Tutoring Sessions</h1>
-                            {% if profile.accepted_list.all %}
+                            {% if profile.schedule_list.all %}
                             <ul class="list-group">
                             {% for accept in profile.accepted_list.all %}
                             {% for sesh in profile.schedule_list.all %}
