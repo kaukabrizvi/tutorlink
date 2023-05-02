@@ -279,7 +279,10 @@ def accept_student_to_profile(request):
                         seshlist.append(sesh)
                 if len(seshlist) == 0:
                     theUser.connected_list.remove(theStudent.user)
-                    theStudent.connected_list.remove(theUser.user) 
+                    theStudent.connected_list.remove(theUser.user)
+                
+                theUser.save()
+                theStudent.save()
                 theSesh.delete()
         return redirect("index")
 
