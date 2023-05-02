@@ -20,6 +20,23 @@ import requests
 import operator
 
 # Create your views here.
+"""
+Refrences:
+-----------------
+For the SearchResultsView
+Title: Djanog Search Tutorial
+Author: Will Vincent
+URL : learndjango.com/tutorials/django-search-tutorial
+------------------------------
+*  For Reviews
+*  Title: Reviews Function
+*  Author: W3 Schools
+*  Code version: HTML
+*  URL: https://www.w3schools.com/howto/howto_css_user_rating.asp
+*  Software License: <license software is released under>
+
+"""
+
 
 
 def index(request):
@@ -230,6 +247,13 @@ def accept_student_to_profile(request):
                 theSesh.accepted = True
                 theSesh.save()
             else:
+                seshlist= []
+                for sesh in theUser.schedule_list.all():
+                    if sesh.student == theStudent.user and not sesh.accepted:
+                        seshlist.append(sesh)
+                if len(seshlist) == 0:
+                    theUser.connected_list.remove(theStudent.user)
+                    theStudent.connected_list.remove(theUser.user) 
                 theSesh.delete()
         return redirect("index")
 
