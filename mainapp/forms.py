@@ -63,6 +63,8 @@ class UpdateTheTutorProfileForm(forms.Form):
     hourly_rate = forms.FloatField(label="Hourly Rate ($USD)",required=False)
     bio = forms.CharField(label="Bio", widget=forms.Textarea(attrs={'cols': 40, 'rows': 5}), required=False)
 
+    # Title: Form and field validation
+    # URL: https://docs.djangoproject.com/en/4.2/ref/forms/validation/
     def clean(self):
         if self.data['mon_avail_start'] > self.data['mon_avail_end'] or self.data['tue_avail_start'] > self.data['tue_avail_end'] or self.data['wed_avail_start'] > self.data['wed_avail_end'] or self.data['thu_avail_start'] > self.data['thu_avail_end'] or self.data['fri_avail_start'] > self.data['fri_avail_end'] or self.data['sat_avail_start'] > self.data['sat_avail_end'] or self.data['sun_avail_start'] > self.data['sun_avail_end']:
             raise ValidationError('Availability start time must be before end time')
