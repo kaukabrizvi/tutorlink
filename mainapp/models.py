@@ -42,6 +42,22 @@ class Profile(models.Model):
         schedule_list = models.ManyToManyField(TutorSesh, related_name="schedule_list", blank=True)
 
         phone_number = models.CharField(max_length=12, default="000-000-0000")
+        
+        mon_avail_start = models.TimeField(default=datetime.time(0,0))
+        mon_avail_end = models.TimeField(default=datetime.time(23,59))
+        tue_avail_start = models.TimeField(default=datetime.time(0,0))
+        tue_avail_end = models.TimeField(default=datetime.time(23,59))
+        wed_avail_start = models.TimeField(default=datetime.time(0,0))
+        wed_avail_end = models.TimeField(default=datetime.time(23,59))
+        thu_avail_start = models.TimeField(default=datetime.time(0,0))
+        thu_avail_end = models.TimeField(default=datetime.time(23,59))
+        fri_avail_start = models.TimeField(default=datetime.time(0,0))
+        fri_avail_end = models.TimeField(default=datetime.time(23,59))
+        sat_avail_start = models.TimeField(default=datetime.time(0,0))
+        sat_avail_end = models.TimeField(default=datetime.time(23,59))
+        sun_avail_start = models.TimeField(default=datetime.time(0,0))
+        sun_avail_end = models.TimeField(default=datetime.time(23,59))
+
         monday = models.BooleanField(default=False)
         tuesday = models.BooleanField(default=False)
         wednesday = models.BooleanField(default=False)
@@ -51,12 +67,12 @@ class Profile(models.Model):
         sunday = models.BooleanField(default=False)
         hourly_rate = models.DecimalField(default=10,decimal_places=2,max_digits=5)
 
-        avail_start = models.TimeField(default=datetime.time(0,0,0))
-        avail_end = models.TimeField(default=datetime.time(23,59,59))
+        #avail_start = models.TimeField(default=datetime.time(0,0,0))
+        #avail_end = models.TimeField(default=datetime.time(23,59,59))
 
         review_count = models.IntegerField(default=0)
         rating = models.DecimalField(default=0, decimal_places=2, max_digits=3)
-
+        bio = models.TextField(blank=True)
         def __str__(self):
                 return str(self.user)
 

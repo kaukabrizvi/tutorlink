@@ -20,6 +20,26 @@ import requests
 import operator
 
 # Create your views here.
+"""
+Refrences:
+-----------------
+For the SearchResultsView
+Title: Djanog Search Tutorial
+Author: Will Vincent
+URL : learndjango.com/tutorials/django-search-tutorial
+------------------------------
+
+"""
+"""
+*  For Reviews
+*  Title: Reviews Function
+*  Author: W3 Schools
+*  Code version: HTML
+*  URL: https://www.w3schools.com/howto/howto_css_user_rating.asp
+*  Software License: <license software is released under>
+
+"""
+
 
 
 def index(request):
@@ -145,7 +165,6 @@ def getAllTutors(request):
     }
     return render(request,"mainapp/tutorList.html",context)
 
-#Got this from learndjango.com/tutorials/django-search-tutorial
 class SearchResultsView(ListView):
     model = Profile
     template_name = "mainapp/tutorList.html"
@@ -184,16 +203,35 @@ def add_tutor_to_profile(request): #need to figure out how we're going to connec
             theTutor = Profile.objects.get(user=request.POST["tutor"])
             theDate = datetime.datetime.strptime(request.POST["date"],"%Y-%m-%d")
             theTime = datetime.datetime.strptime(request.POST["time"],"%H:%M").time()
-            dates = { #use this to do the comparison dynamically for day of the week
-                0 : theTutor.monday,
-                1 : theTutor.tuesday,
-                2 : theTutor.wednesday,
-                3 : theTutor.thursday,
-                4 : theTutor.friday,
-                5 : theTutor.saturday,
-                6 : theTutor.sunday,
+            #dates = { #use this to do the comparison dynamically for day of the week
+            #    0 : theTutor.monday,
+            #    1 : theTutor.tuesday,
+            #    2 : theTutor.wednesday,
+            #    3 : theTutor.thursday,
+            #    4 : theTutor.friday,
+            #    5 : theTutor.saturday,
+            #    6 : theTutor.sunday,
+            #}
+            day_start = {
+                0 : theTutor.mon_avail_start,
+                1 : theTutor.tue_avail_start,
+                2 : theTutor.wed_avail_start,
+                3 : theTutor.thu_avail_start,
+                4 : theTutor.fri_avail_start,
+                5 : theTutor.sat_avail_start,
+                6 : theTutor.sun_avail_start,
             }
-            if theDate >= datetime.datetime.now() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime:
+            day_end = {
+                0 : theTutor.mon_avail_end,
+                1 : theTutor.tue_avail_end,
+                2 : theTutor.wed_avail_end,
+                3 : theTutor.thu_avail_end,
+                4 : theTutor.fri_avail_end,
+                5 : theTutor.sat_avail_end,
+                6 : theTutor.sun_avail_end,
+            }
+            
+            if theDate >= datetime.datetime.now() and (day_start[theDate.weekday()] < theTime < day_end[theDate.weekday()]) and theTime > localtime:
                 theSesh = TutorSesh.objects.create(
                     tutor=theTutor.user,
                     student = theUser.user,
@@ -218,17 +256,22 @@ def accept_student_to_profile(request):
             theSesh = TutorSesh.objects.get(id=int(sesh))
             theUser = Profile.objects.get(user=theSesh.tutor)
             theStudent = Profile.objects.get(user=theSesh.student)
-            #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
             if request.method == "POST" and "accept" in request.POST:
-                theUser.accepted_list.add(theStudent.user)
-                theUser.connected_list.remove(theStudent.user)
-                theUser.save()
-                theStudent.accepted_list.add(theUser.user)
-                theStudent.connected_list.remove(theUser.user)  
-                theUser.schedule_list.add(theSesh)
-                theStudent.save()
                 theSesh.accepted = True
                 theSesh.save()
+                theUser.accepted_list.add(theStudent.user)
+                seshlist= []
+                for sesh in theUser.schedule_list.all():
+                    if sesh.student == theStudent.user and not sesh.accepted:
+                        seshlist.append(sesh)
+                if len(seshlist) == 0:
+                    theUser.connected_list.remove(theStudent.user)
+                    theStudent.connected_list.remove(theUser.user) 
+                
+                theUser.save()
+                theStudent.accepted_list.add(theUser.user) 
+                theUser.schedule_list.add(theSesh)
+                theStudent.save()
             else:
                 theSesh.delete()
         return redirect("index")
@@ -344,31 +387,51 @@ class TutorProfileEditView(ListView):
         form.fields['friday'].initial = theUser.friday
         form.fields['saturday'].initial = theUser.saturday
         form.fields['sunday'].initial = theUser.sunday
+        form.fields['mon_avail_start'].initial = theUser.mon_avail_start
+        form.fields['mon_avail_end'].initial = theUser.mon_avail_end
+        form.fields['tue_avail_start'].initial = theUser.tue_avail_start
+        form.fields['tue_avail_end'].initial = theUser.tue_avail_end
+        form.fields['wed_avail_start'].initial = theUser.wed_avail_start
+        form.fields['wed_avail_end'].initial = theUser.wed_avail_end
+        form.fields['thu_avail_start'].initial = theUser.thu_avail_start
+        form.fields['thu_avail_end'].initial = theUser.thu_avail_end
+        form.fields['fri_avail_start'].initial = theUser.fri_avail_start
+        form.fields['fri_avail_end'].initial = theUser.fri_avail_end
+        form.fields['sat_avail_start'].initial = theUser.sat_avail_start
+        form.fields['sat_avail_end'].initial = theUser.sat_avail_end
+        form.fields['sun_avail_start'].initial = theUser.sun_avail_start
+        form.fields['sun_avail_end'].initial = theUser.sun_avail_end
         form.fields['phone_number'].initial = theUser.phone_number
-        form.fields['avail_start'].initial = theUser.avail_start
-        form.fields['avail_end'].initial = theUser.avail_end
         form.fields['hourly_rate'].initial = theUser.hourly_rate
+        form.fields['bio'].initial = theUser.bio
         return render(request,self.template_name,{'form' : form})
 
+
+
+#Googled what were some functions i could use to get attributes, didn't exactly copy any specific code
 def TutorProfileEdit(request):
-    theUser = Profile.objects.get(user=request.user)
-    days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
-    for key in request.POST:
-        if key == "username":
-            print("IN HERE")
-            theUser.user.username = request.POST[key]
-            print(theUser.user.username)
-            theUser.user.save()
-        elif hasattr(theUser,key):
-            if request.POST[key] == "on": #this is for the checkboxes
-                setattr(theUser,key,True)
-                days_list.remove(key)
-            else:
-                setattr(theUser,key,request.POST[key])
-    for day in days_list:
-        setattr(theUser,day,False)
-    theUser.save()
-    return redirect('index')
+    form = UpdateTheTutorProfileForm(request.POST)
+    if form.is_valid():
+        theUser = Profile.objects.get(user=request.user)
+        days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
+        for key in request.POST:
+            if key == "username":
+                print("IN HERE")
+                theUser.user.username = request.POST[key]
+                print(theUser.user.username)
+                theUser.user.save()
+            elif hasattr(theUser,key):
+                if request.POST[key] == "on": #this is for the checkboxes
+                    setattr(theUser,key,True)
+                    days_list.remove(key)
+                else:
+                    setattr(theUser,key,request.POST[key])
+        for day in days_list:
+            setattr(theUser,day,False)
+        theUser.save()
+        return redirect('index')
+    else:
+        return render(request, "mainapp/edit_tutor_profile.html" ,{'form' : form})
     
 
 class StudentProfileEditView(ListView):
@@ -412,7 +475,8 @@ def submit_review(request, tutor_id):
 
 def getTutorProfile(request,tutor_id):
     tutor = Profile.objects.get(id=tutor_id)
-    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm})
+    theUser = Profile.objects.get(user=request.user)
+    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm, 'user' : theUser})
 
 
 def add_tutor_to_profile_from_profile(request):
@@ -430,8 +494,25 @@ def add_tutor_to_profile_from_profile(request):
                 5 : theTutor.saturday,
                 6 : theTutor.sunday,
             }
-
-            if theDate.date() >= datetime.datetime.now().date() and dates[theDate.weekday()] and (theTutor.avail_start < theTime < theTutor.avail_end) and theTime > localtime().time():
+            day_start = {
+                0 : theTutor.mon_avail_start,
+                1 : theTutor.tue_avail_start,
+                2 : theTutor.wed_avail_start,
+                3 : theTutor.thu_avail_start,
+                4 : theTutor.fri_avail_start,
+                5 : theTutor.sat_avail_start,
+                6 : theTutor.sun_avail_start,
+            }
+            day_end = {
+                0 : theTutor.mon_avail_end,
+                1 : theTutor.tue_avail_end,
+                2 : theTutor.wed_avail_end,
+                3 : theTutor.thu_avail_end,
+                4 : theTutor.fri_avail_end,
+                5 : theTutor.sat_avail_end,
+                6 : theTutor.sun_avail_end,
+            }
+            if dates[theDate.weekday()] and ((theDate.date() == datetime.datetime.now().date() and theTime > localtime().time()) or (theDate.date() > datetime.datetime.now().date())) and (day_start[theDate.weekday()] < theTime < day_end[theDate.weekday()]):
                 theSesh = TutorSesh.objects.create(
                     tutor=theTutor.user,
                     student = theUser.user,
