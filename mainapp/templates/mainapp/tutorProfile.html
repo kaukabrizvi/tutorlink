@@ -47,6 +47,18 @@ flex:none !important;
               </div>
             </div>
         </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Tutor Bio</h5>
+              {% if tutor.bio %}
+              <p>{{ tutor.bio }}</p>
+              {% else %}
+              <p class="card-text">No bio available</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
         </div>
         <div class="row">
           <div class="card mb-4">

@@ -56,7 +56,7 @@ class Profile(models.Model):
 
         review_count = models.IntegerField(default=0)
         rating = models.DecimalField(default=0, decimal_places=2, max_digits=3)
-
+        bio = models.TextField(blank=True)
         def __str__(self):
                 return str(self.user)
 
