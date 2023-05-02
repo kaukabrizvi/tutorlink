@@ -522,7 +522,7 @@ def add_tutor_to_profile_from_profile(request):
                 5 : theTutor.sat_avail_end,
                 6 : theTutor.sun_avail_end,
             }
-            if dates[theDate.weekday()] and ((theDate.date() == datetime.datetime.now().date() and theTime > localtime().time()) or (theDate.date() > datetime.datetime.now().date())) and (day_start[theDate.weekday()] < theTime < day_end[theDate.weekday()]):
+            if dates[theDate.weekday()] and ((theDate.date() == datetime.datetime.now().date() and theTime > localtime().time()) or (theDate.date() > datetime.datetime.now().date())) and (day_start[theDate.weekday()] <= theTime <= day_end[theDate.weekday()]):
                 theSesh = TutorSesh.objects.create(
                     tutor=theTutor.user,
                     student = theUser.user,
