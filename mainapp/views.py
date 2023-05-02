@@ -237,18 +237,14 @@ def accept_student_to_profile(request):
             theSesh = TutorSesh.objects.get(id=int(sesh))
             theUser = Profile.objects.get(user=theSesh.tutor)
             theStudent = Profile.objects.get(user=theSesh.student)
-            #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
             if request.method == "POST" and "accept" in request.POST:
                 theSesh.accepted = True
                 theSesh.save()
                 theUser.accepted_list.add(theStudent.user)
                 seshlist= []
                 for sesh in theUser.schedule_list.all():
-                    print(sesh.student)
-                    print(sesh.accepted)
                     if sesh.student == theStudent.user and not sesh.accepted:
                         seshlist.append(sesh)
-                print(len(seshlist))
                 if len(seshlist) == 0:
                     theUser.connected_list.remove(theStudent.user)
                     theStudent.connected_list.remove(theUser.user) 
@@ -365,6 +361,13 @@ class TutorProfileEditView(ListView):
         form = self.form_class()
         theUser = Profile.objects.get(user=request.user)
         form.fields['username'].initial = theUser.user.username
+        form.fields['monday'].initial = theUser.monday
+        form.fields['tuesday'].initial = theUser.tuesday
+        form.fields['wednesday'].initial = theUser.wednesday
+        form.fields['thursday'].initial = theUser.thursday
+        form.fields['friday'].initial = theUser.friday
+        form.fields['saturday'].initial = theUser.saturday
+        form.fields['sunday'].initial = theUser.sunday
         form.fields['mon_avail_start'].initial = theUser.mon_avail_start
         form.fields['mon_avail_end'].initial = theUser.mon_avail_end
         form.fields['tue_avail_start'].initial = theUser.tue_avail_start
