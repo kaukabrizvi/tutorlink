@@ -274,8 +274,8 @@ def accept_student_to_profile(request):
                 theStudent.save()
             else:
                 seshlist= []
-                for sesh in theUser.schedule_list.all():
-                    if sesh.student == theStudent.user and not sesh.accepted:
+                for sesh in theStudent.schedule_list.all():
+                    if sesh.tutor == theUser.user and not sesh.accepted:
                         seshlist.append(sesh)
                 if len(seshlist) == 0:
                     theUser.connected_list.remove(theStudent.user)
