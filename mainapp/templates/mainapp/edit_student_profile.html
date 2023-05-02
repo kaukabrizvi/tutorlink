@@ -2,6 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+<!--
+    URL: django-crispy-forms.readthedocs.io/en/latest
+    License: Believe to be MIT but not sure
+-->
     <h1>Edit your Profile</h1>
     <form method="POST" action="{%url 'make-changes-student' %}">
         {% csrf_token %}
