@@ -387,25 +387,30 @@ class TutorProfileEditView(ListView):
         form.fields['bio'].initial = theUser.bio
         return render(request,self.template_name,{'form' : form})
 
+
 def TutorProfileEdit(request):
-    theUser = Profile.objects.get(user=request.user)
-    days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
-    for key in request.POST:
-        if key == "username":
-            print("IN HERE")
-            theUser.user.username = request.POST[key]
-            print(theUser.user.username)
-            theUser.user.save()
-        elif hasattr(theUser,key):
-            if request.POST[key] == "on": #this is for the checkboxes
-                setattr(theUser,key,True)
-                days_list.remove(key)
-            else:
-                setattr(theUser,key,request.POST[key])
-    for day in days_list:
-        setattr(theUser,day,False)
-    theUser.save()
-    return redirect('index')
+    form = UpdateTheTutorProfileForm(request.POST)
+    if form.is_valid():
+        theUser = Profile.objects.get(user=request.user)
+        days_list = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
+        for key in request.POST:
+            if key == "username":
+                print("IN HERE")
+                theUser.user.username = request.POST[key]
+                print(theUser.user.username)
+                theUser.user.save()
+            elif hasattr(theUser,key):
+                if request.POST[key] == "on": #this is for the checkboxes
+                    setattr(theUser,key,True)
+                    days_list.remove(key)
+                else:
+                    setattr(theUser,key,request.POST[key])
+        for day in days_list:
+            setattr(theUser,day,False)
+        theUser.save()
+        return redirect('index')
+    else:
+        return render(request, "mainapp/edit_tutor_profile.html" ,{'form' : form})
     
 
 class StudentProfileEditView(ListView):
