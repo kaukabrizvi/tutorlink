@@ -6,6 +6,14 @@ from .models import TutorSesh
 from django.core.exceptions import ValidationError
 
 
+"""
+Title : How to Use Date Picker with Django
+Author: Victor Freitas
+Url : https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html
+Date: April 2, 2023
+
+"""
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 

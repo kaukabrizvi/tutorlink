@@ -156,11 +156,6 @@ def getAllTutors(request):
     }
     return render(request,"mainapp/tutorList.html",context)
 
-"""
-Title: Djanog Search Tutorial
-Author: Will Vincent
-URL : learndjango.com/tutorials/django-search-tutorial
-"""
 class SearchResultsView(ListView):
     model = Profile
     template_name = "mainapp/tutorList.html"
@@ -403,6 +398,8 @@ class TutorProfileEditView(ListView):
         return render(request,self.template_name,{'form' : form})
 
 
+
+#Googled what were some functions i could use to get attributes, didn't exactly copy any specific code
 def TutorProfileEdit(request):
     form = UpdateTheTutorProfileForm(request.POST)
     if form.is_valid():
