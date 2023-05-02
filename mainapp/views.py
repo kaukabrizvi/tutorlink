@@ -273,6 +273,7 @@ def accept_student_to_profile(request):
                 theUser.schedule_list.add(theSesh)
                 theStudent.save()
             else:
+                theSesh.delete()
                 seshlist= []
                 for sesh in theStudent.schedule_list.all():
                     if sesh.tutor == theUser.user and not sesh.accepted:
@@ -283,7 +284,6 @@ def accept_student_to_profile(request):
                 
                 theUser.save()
                 theStudent.save()
-                theSesh.delete()
         return redirect("index")
 
 def myTutorList(request):
