@@ -348,6 +348,7 @@ class TutorProfileEditView(ListView):
         form.fields['avail_start'].initial = theUser.avail_start
         form.fields['avail_end'].initial = theUser.avail_end
         form.fields['hourly_rate'].initial = theUser.hourly_rate
+        form.fields['bio'].initial = theUser.bio
         return render(request,self.template_name,{'form' : form})
 
 def TutorProfileEdit(request):

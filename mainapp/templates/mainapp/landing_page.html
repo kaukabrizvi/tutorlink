@@ -145,11 +145,7 @@
                             {% else %}
                             <p>You have no pending requests. </p>
                             {% if not profile.monday and not profile.tuesday and not profile.wednesday and not profile.thursday and not profile.friday and not profile.saturday and not profile.sunday and not profile.bio %}
-                            <div class="p-3 mb-2 bg-danger text-white">You have not set your Availability or Bio, edit your profile so students can link with you!</div>
-                            {% elif not profile.monday and not profile.tuesday and not profile.wednesday and not profile.thursday and not profile.friday and not profile.saturday and not profile.sunday %}
-                            <div class="p-3 mb-2 bg-secondary text-white">You have not set your Availability, edit your profile so students can link with you!</div>
-                            {% elif not profile.bio %}
-                            <div class="p-3 mb-2 bg-dark text-white">You have not set your Bio, edit your profile so students can link with you!</div>
+                            <div class="p-3 mb-2 bg-danger text-white">You have not set your Availability, edit your profile so students can link with you!</div>
                             {% endif %}
                             {% endif %}
                         </div>
