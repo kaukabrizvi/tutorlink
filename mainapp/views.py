@@ -30,6 +30,15 @@ URL : learndjango.com/tutorials/django-search-tutorial
 ------------------------------
 
 """
+"""
+*  For Reviews
+*  Title: Reviews Function
+*  Author: W3 Schools
+*  Code version: HTML
+*  URL: https://www.w3schools.com/howto/howto_css_user_rating.asp
+*  Software License: <license software is released under>
+
+"""
 
 
 
