@@ -2,10 +2,60 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
+<script>
+    function hide() {
+        if(document.getElementById('id_monday').checked) {
+            document.getElementById('id_mon_avail_start').style.display = 'none';
+            document.getElementById('id_mon_avail_end').style.display = 'none';
+        }
+        else {
+            document.getElementById('id_mon_avail_start').style.display = '';
+            document.getElementById('id_mon_avail_end').style.display = '';
+        }
+
+    }
+    window.onload = function() {
+        document.getElementById('mon').onchange = Hide;
+    };
+</script>
     <h1>Edit your Profile</h1>
     <form method="POST" action="{%url 'make-changes-tutor' %}">
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="form-row">
+            <div class="form-group col-md-6 mb-0">{{ form.username|as_crispy_field }}</div>
+            <div class="form-group col-md-6 mb-0">{{ form.phone_number|as_crispy_field }}</div>
+        </div>
+        {{ form.hourly_rate|as_crispy_field }}
+        {{ form.bio|as_crispy_field }}
+        <h2>Availability</h2>
+        {{ form.monday|as_crispy_field}}
+        {{ form.mon_avail_start|as_crispy_field}}
+        {{ form.mon_avail_end|as_crispy_field}}
+
+        {{ form.tuesday|as_crispy_field}}
+        {{ form.tue_avail_start|as_crispy_field}}
+        {{ form.tue_avail_end|as_crispy_field}}
+
+        {{ form.wednesday|as_crispy_field}}
+        {{ form.wed_avail_start|as_crispy_field}}
+        {{ form.wed_avail_end|as_crispy_field}}
+
+        {{ form.thursday|as_crispy_field}}
+        {{ form.thu_avail_start|as_crispy_field}}
+        {{ form.thu_avail_end|as_crispy_field}}
+
+        {{ form.friday|as_crispy_field}}
+        {{ form.fri_avail_start|as_crispy_field}}
+        {{ form.fri_avail_end|as_crispy_field}}
+
+        {{ form.saturday|as_crispy_field}}
+        {{ form.sat_avail_start|as_crispy_field}}
+        {{ form.sat_avail_end|as_crispy_field}}
+
+        {{ form.sunday|as_crispy_field}}
+        {{ form.sun_avail_start|as_crispy_field}}
+        {{ form.sun_avail_end|as_crispy_field}}
+
         <button class="btn btn-info" type="submit">Make Changes</button>
     </form>
 {% endblock %}
