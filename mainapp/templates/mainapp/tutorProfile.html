@@ -180,6 +180,7 @@ flex:none !important;
         <div class="card mb-4 mb-lg-0">
           <div class="card-body p-0">
             <ul class="list-group list-group-flush rounded-3">
+              {% if user.is_student %}
               <h2>Schedule a Session</h2>
               {% if messages %}
                 {% for message in messages %}
@@ -195,6 +196,7 @@ flex:none !important;
                 <button type="submit" class="btn btn-info" name="tutor" value="{{tutor.id}}">Request Selected Tutor</button>
                 </div>
               </form>
+              {% endif %}
             </ul>
           </div>
         </div>

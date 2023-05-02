@@ -412,7 +412,8 @@ def submit_review(request, tutor_id):
 
 def getTutorProfile(request,tutor_id):
     tutor = Profile.objects.get(id=tutor_id)
-    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm})
+    theUser = Profile.objects.get(user=request.user)
+    return render(request, 'mainapp/tutorProfile.html', {'tutor' : tutor, 'form' : TutorSeshForm, 'user' : theUser})
 
 
 def add_tutor_to_profile_from_profile(request):
