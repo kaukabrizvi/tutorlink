@@ -39,6 +39,7 @@ class UpdateTheTutorProfileForm(forms.Form):
     avail_start = forms.TimeField(label="Availability Start", widget=TimeInput)
     avail_end = forms.TimeField(label="Availibility End", widget=TimeInput)
     hourly_rate = forms.FloatField(label="Hourly Rate ($USD)",required=False)
+    bio = forms.CharField(label="Bio", widget=forms.Textarea(attrs={'cols': 40, 'rows': 5}), required=False)
 
 
 class UpdateTheStudentProfileForm(forms.Form):

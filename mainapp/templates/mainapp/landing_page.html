@@ -28,7 +28,7 @@
                     <form method="GET" action="{% url 'search_classes' %}">
                         <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
                             <div class="input-group">
-                                <input type="search" placeholder="Search for a class by its name e.g. advanced software development, poetry writing, etc." aria-describedby="button-addon1" class="form-control border-0 bg-light" name="q" id="search-input">
+                                <input type="search" placeholder="Search for a class by its NAME e.g. advanced software development, poetry writing, etc." aria-describedby="button-addon1" class="form-control border-0 bg-light" name="q" id="search-input">
                                 <input type="hidden" name="descr" value="">
                                 <div class="input-group-append">
                                     <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
@@ -112,7 +112,12 @@
                             <ul class="list-group">
                             {% for sesh in profile.schedule_list.all %}
                             {% if sesh.accepted %}
-                            <li class="list-group-item d-flex">{{sesh.student}} on {{sesh.date}} at {{sesh.time}}</li>
+                            <li class="list-group-item d-flex justify-content-between">
+                              <div>
+                                {{sesh.student}} on {{sesh.date}} at {{sesh.time}}
+                              </div>
+                              <div class="ml-auto">E: {{sesh.student.user.email}}</div>
+                            </li>
                             {% endif %}
                             {% endfor %}
                             </ul>
@@ -140,7 +145,14 @@
                                 <button name = "deny" class="btn btn-danger" type="submit">Deny Selected Students</button>
                             </form>
                             {% else %}
-                            <p>You have no pending requests</p>
+                            <p>You have no pending requests. </p>
+                            {% if not profile.monday and not profile.tuesday and not profile.wednesday and not profile.thursday and not profile.friday and not profile.saturday and not profile.sunday and not profile.bio%}
+                            <div class="p-3 mb-2 bg-danger text-white">You have not set your Availability or Bio, edit your profile so students can link with you!</div>
+                            {% elif not profile.monday and not profile.tuesday and not profile.wednesday and not profile.thursday and nost profile.friday and not profile.saturday and not profile.sunday %}
+                            <div class="p-3 mb-2 bg-secondary text-white">You have not set your Availability, edit your profile so students can link with you!</div>
+                            {% elif not profile.bio %}
+                            <div class="p-3 mb-2 bg-dark text-white">You have not set your Bio, edit your profile so students can link with you!</div>
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>
