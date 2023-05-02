@@ -220,15 +220,24 @@ def accept_student_to_profile(request):
             theStudent = Profile.objects.get(user=theSesh.student)
             #theSesh = theStudent.schedule_list.get(tutor=theUser.user, student = theStudent.user, )
             if request.method == "POST" and "accept" in request.POST:
-                theUser.accepted_list.add(theStudent.user)
-                theUser.connected_list.remove(theStudent.user)
-                theUser.save()
-                theStudent.accepted_list.add(theUser.user)
-                theStudent.connected_list.remove(theUser.user)  
-                theUser.schedule_list.add(theSesh)
-                theStudent.save()
                 theSesh.accepted = True
                 theSesh.save()
+                theUser.accepted_list.add(theStudent.user)
+                seshlist= []
+                for sesh in theUser.schedule_list.all():
+                    print(sesh.student)
+                    print(sesh.accepted)
+                    if sesh.student == theStudent.user and not sesh.accepted:
+                        seshlist.append(sesh)
+                print(len(seshlist))
+                if len(seshlist) == 0:
+                    theUser.connected_list.remove(theStudent.user)
+                    theStudent.connected_list.remove(theUser.user) 
+                
+                theUser.save()
+                theStudent.accepted_list.add(theUser.user) 
+                theUser.schedule_list.add(theSesh)
+                theStudent.save()
             else:
                 theSesh.delete()
         return redirect("index")
